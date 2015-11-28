@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	authUrl              = "https://auth.cloud.ovh.net/v2.0/"
+	authURL              = "https://auth.cloud.ovh.net/v2.0/"
 	imageName            = "Ubuntu 14.04"
-	SSHUser              = "admin"
+	sshUser              = "admin"
 	networkName          = "Ext-Net"
 	defaultFlavorName    = "vps-ssd-1"
 	defaultRegionName    = "GRA1"

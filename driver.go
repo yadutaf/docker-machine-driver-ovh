@@ -79,7 +79,7 @@ func missingEnvOrOption(setting, envVar, opt string) error {
 
 // SetConfigFromFlags assigns and verifies the command-line arguments presented to the driver.
 func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
-	d.AuthUrl = authUrl
+	d.AuthUrl = authURL
 	d.Username = flags.String("ovh-username")
 	d.Password = flags.String("ovh-password")
 	d.TenantId = flags.String("ovh-tenant-id")
@@ -88,7 +88,7 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.Region = flags.String("ovh-region")
 	d.FlavorName = flags.String("ovh-flavor")
 	d.ImageName = imageName
-	d.SSHUser = SSHUser
+	d.SSHUser = sshUser
 
 	d.IpVersion = 4
 	d.NetworkName = networkName
