@@ -1,4 +1,4 @@
-[![OVH Cloud driver for Docker-Machine](http://yadutaf.github.io/docker-machine-driver-ovh/img/logo.png)](https://github.com/yadutaf/docker-machine-driver-ovh)
+[![OVH Cloud driver for Docker-Machine](https://raw.githubusercontent.com/yadutaf/docker-machine-driver-ovh/master/img/logo.png)](https://github.com/yadutaf/docker-machine-driver-ovh)
 
 ```bash
 # Create your first /cloud Docker vps
@@ -19,7 +19,7 @@ go install github.com/yadutaf/docker-machine-driver-ovh
 
 ## Example Usage
 
-### 1. Get OpenStack credentials
+### 1. Get your OpenStack credentials
 
 1. Login to your /Cloud control panel: https://www.ovh.com/manager/cloud/index.html
 2. Select "Project management and resource usage", from the top right corner
