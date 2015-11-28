@@ -80,8 +80,9 @@ export PATH=$GOPATH/src/github.com/yadutaf/docker-machine-driver-ovh:$PATH
 
 - **OVH Cloud console**: https://www.ovh.com/manager/cloud/index.html
 - **OVH Cloud offers**: https://www.ovh.com/us/cloud/
+- **Docker Machine**: https://docs.docker.com/machine/
 - **Contribute**: https://github.com/yadutaf/docker-machine-driver-ovh
-- **Report bugs**: https://github.com/yadutaf/docker-machine-driver-ovh
+- **Report bugs**: https://github.com/yadutaf/docker-machine-driver-ovh/issues
 
 ## License
 
