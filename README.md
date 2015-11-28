@@ -5,7 +5,7 @@
 docker-machine create -d ovh hello-docker
 ```
 
-OVH Cloud Driver is based on openstack driver. To use it, you need a cloud
+OVH Cloud Driver is based on OpenStack driver. To use it, you need a cloud
 project. If you don't have one yet, you may create one from [your OVH control
 panel](https://www.ovh.com/manager/cloud/index.html) at any time.
 
@@ -26,7 +26,7 @@ go install github.com/yadutaf/docker-machine-driver-ovh
 3. Select the OpenStack tab
 4. If you need one, select "Add user"
 5. Click on wrench icon, on the right
-6. Select "Download an Openstack configuration file"
+6. Select "Download an OpenStack configuration file"
 
 ### 2. Source it
 
@@ -56,7 +56,7 @@ docker-machine create -d ovh node-1
 Note: All "OpenStack" parameters come from ``openrc.sh``. It is highly
 recommended to use this file to simplify docker-machine creation.
 
-Each environment variable may be orverloaded by it option equivalent at run time.
+Each environment variable may be overloaded by its option equivalent at runtime.
 
 ## Hacking
 
@@ -69,9 +69,8 @@ cd $GOPATH/src/github.com/yadutaf/docker-machine-driver-ovh
 
 ### Test the driver
 
-To test the driver will develping on it, make sure your current
-build directory has the highest priority in your ``$PATH`` so that
-docker-machine can find it.
+To test the driver make sure your current build directory has the highest
+priority in your ``$PATH`` so that docker-machine can find it.
 
 ```
 export PATH=$GOPATH/src/github.com/yadutaf/docker-machine-driver-ovh:$PATH
