@@ -1,7 +1,7 @@
 [![OVH Cloud driver for Docker-Machine](https://raw.githubusercontent.com/yadutaf/docker-machine-driver-ovh/master/img/logo.png)](https://github.com/yadutaf/docker-machine-driver-ovh)
 
 ```bash
-# Create your first /cloud Docker vps
+# Create your first OVH Cloud Docker machine
 docker-machine create -d ovh hello-docker
 ```
 
