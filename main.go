@@ -6,13 +6,14 @@ import (
 )
 
 const (
-	authURL              = "https://auth.cloud.ovh.net/v2.0/"
-	imageName            = "Ubuntu 14.04"
-	sshUser              = "admin"
-	networkName          = "Ext-Net"
-	defaultFlavorName    = "vps-ssd-1"
-	defaultRegionName    = "GRA1"
-	defaultSecurityGroup = "default"
+	AuthURL              = "https://auth.cloud.ovh.net/v2.0/"
+	DefaultSecurityGroup = "default"
+	DefaultProjectName   = "docker-machine"
+	DefaultFlavorName    = "vps-ssd-1"
+	DefaultRegionName    = "GRA1"
+	NetworkName          = "Ext-Net"
+	ImageName            = "Ubuntu 14.04"
+	SshUserName          = "admin"
 )
 
 func main() {

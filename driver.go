@@ -46,19 +46,19 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			EnvVar: "OS_REGION_NAME",
 			Name:   "ovh-region",
 			Usage:  "OVH Cloud region name",
-			Value:  defaultRegionName,
+			Value:  DefaultRegionName,
 		},
 		mcnflag.StringFlag{
 			EnvVar: "OS_FLAVOR_NAME",
 			Name:   "ovh-flavor",
 			Usage:  "OVH Cloud flavor name. Default: VPS SSD 2GB",
-			Value:  defaultFlavorName,
+			Value:  DefaultFlavorName,
 		},
 		mcnflag.StringFlag{
 			EnvVar: "OS_SECURITY_GROUPS",
 			Name:   "ovh-sec-groups",
 			Usage:  "OVH Cloud comma separated security groups for the machine",
-			Value:  defaultSecurityGroup,
+			Value:  DefaultSecurityGroup,
 		},
 	}
 }
@@ -79,7 +79,7 @@ func missingEnvOrOption(setting, envVar, opt string) error {
 
 // SetConfigFromFlags assigns and verifies the command-line arguments presented to the driver.
 func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
-	d.AuthUrl = authURL
+	d.AuthUrl = AuthURL
 	d.Username = flags.String("ovh-username")
 	d.Password = flags.String("ovh-password")
 	d.TenantId = flags.String("ovh-tenant-id")
@@ -87,11 +87,11 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 
 	d.Region = flags.String("ovh-region")
 	d.FlavorName = flags.String("ovh-flavor")
-	d.ImageName = imageName
-	d.SSHUser = sshUser
+	d.ImageName = ImageName
+	d.SSHUser = SshUserName
 
 	d.IpVersion = 4
-	d.NetworkName = networkName
+	d.NetworkName = NetworkName
 	if flags.String("ovh-sec-groups") != "" {
 		d.SecurityGroups = strings.Split(flags.String("ovh-sec-groups"), ",")
 	}
