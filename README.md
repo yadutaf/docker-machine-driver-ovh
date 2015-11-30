@@ -5,9 +5,9 @@
 docker-machine create -d ovh hello-docker
 ```
 
-OVH Cloud Driver is based on OpenStack driver. To use it, you need a cloud
-project. If you don't have one yet, you may create one from [your OVH control
-panel](https://www.ovh.com/manager/cloud/index.html) at any time.
+OVH Cloud driver is based on OVH Public API. To create OVH
+API credentials, you may visit https://api.ovh.com. See
+[1. Get your OVH credentials](#1-get-your-ovh-credentials) below for a detailed how-to
 
 ## Installation
 
@@ -15,24 +15,34 @@ The easiest way to install ovh docker-machine driver is to:
 
 ```bash
 go install github.com/yadutaf/docker-machine-driver-ovh
+ln -s $GOPATH/bin/docker-machine-driver-ovh /usr/local/bin/docker-machine-driver-ovh
 ```
 
 ## Example Usage
 
-### 1. Get your OpenStack credentials
+### 1. Get your OVH credentials
 
-1. Login to your /Cloud control panel: https://www.ovh.com/manager/cloud/index.html
-2. Select "Project management and resource usage", from the top right corner
-3. Select the OpenStack tab
-4. If you need one, select "Add user"
-5. Click on wrench icon, on the right
-6. Select "Download an OpenStack configuration file"
+OVH driver never store your OVH login and password. Instead it uses a set of
+3 keys dedicated to a given application. If you don't have your keys already,
+generating them is easy:
 
-### 2. Source it
+1. Go to the token creation page: https://api.ovh.com/createToken/?GET=/*&POST=/*&DELETE=/*&PUT=/*
+2. Enter your login, password, a name and a short description then validate. You may want to increase the validity period.
+3. You now have an ``Application Key``, ``Application Secret`` and a ``Consumer Key``.
 
-```bash
-source openrc.sh
-# And type your OpenStack account password (You may regenerate it at any time from the console)
+## 2. Create a configuration file
+
+This file will allow any application built with official OVH API drivers to
+use it without requiring new keys:
+
+```ini
+[default]
+endpoint=ovh-eu
+
+[ovh-eu]
+application_key=<Application Key>
+application_secret=<Application Secret>
+consumer_key=<Consumer Key>
 ```
 
 ### 3. Create your machines!
@@ -45,18 +55,19 @@ docker-machine create -d ovh node-1
 
 |Option Name|Description|Default Value|required|
 |---|---|---|---|
-|``--ovh-username`` or ``$OS_USERNAME``         |OpenStack user name               |none     |yes|
-|``--ovh-password`` or ``$OS_PASSWORD``         |OpenStack user password           |none     |yes|
-|``--ovh-tenant-name`` or ``$OS_TENANT_NAME``   |OpenStack project name            |none     |yes|
-|``--ovh-tenant-id`` or ``$OS_TENANT_ID``       |OpenStack project id              |none     |yes|
-|``--ovh-region`` or ``OS_REGION_NAME``         |OpenStack region                  |GRA1     |no|
-|``--ovh-flavor`` or ``OS_FLAVOR_NAME``         |Machine type                      |vps-ssd-1|no|
-|``--ovh-sec-groups`` or ``$OS_SECURITY_GROUPS``|Comma separated list of sec-groups|default  |no|
+|``--ovh-application-secret`` or ``$OVH_APPLICATION_SECRET``|Application Secret|none      |yes|
+|``--ovh-application-key`` or ``$OVH_APPLICATION_KEY``      |Application key   |none      |yes|
+|``--ovh-consumer-key`` or ``$OVH_CONSUMER_KEY``            |Consumer Key      |none      |yes|
+|``--ovh-region``                                           |Cloud region      |GRA1      |no|
+|``--ovh-flavor``                                           |Cloud Machine type|vps-ssd-1 |no|
+|``--ovh-project``                                          |Cloud Project name|single one|only if multiple projects|
 
-Note: All "OpenStack" parameters come from ``openrc.sh``. It is highly
-recommended to use this file to simplify docker-machine creation.
+Note: OVH credentials may be supplied through arguments, environment or configuration file, by order
+of decreasing priority. The configuration may be:
 
-Each environment variable may be overloaded by its option equivalent at runtime.
+- global ``/etc/ovh.conf``
+- user specific ``~/.ovh.conf``
+- application specific ``./ovh.conf``
 
 ## Hacking
 
