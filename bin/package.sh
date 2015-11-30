@@ -9,8 +9,9 @@ echo "Getting build dependencies"
 go get -u github.com/golang/lint/golint
 
 echo "Ensuring code quality"
-go vet ./...
-golint ./...
+pkgs=$(go list ./... | grep -v 'vendor')
+go vet $pkgs
+golint $pkgs
 
 for GOOS in $OS; do
     for GOARCH in $ARCH; do
