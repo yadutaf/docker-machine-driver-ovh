@@ -5,6 +5,10 @@ go:
 install: true
 script: "./bin/package.sh"
 
+env:
+    global:
+      - GO15VENDOREXPERIMENT=1
+
 deploy:
   provider: releases
   skip_cleanup: true

@@ -78,6 +78,10 @@ go get github.com/yadutaf/docker-machine-driver-ovh
 cd $GOPATH/src/github.com/yadutaf/docker-machine-driver-ovh
 ```
 
+### Build the driver
+Make sure to export `GO15VENDOREXPERIMENT=1`. Every necessary dependency is
+stored in the vendoring directory.
+
 ### Test the driver
 
 To test the driver make sure your current build directory has the highest
