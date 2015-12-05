@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/yadutaf/go-ovh/ovh"
+	"github.com/yadutaf/go-ovh"
 )
 
 const (
@@ -107,7 +107,7 @@ func NewAPI(endpoint, applicationKey, applicationSecret, consumerKey string) (ap
 
 // GetProjects returns a list of string project Id
 func (a *API) GetProjects() (projects Projects, err error) {
-	res, err := a.client.DoGet("/cloud/project")
+	res, err := a.client.Get("/cloud/project")
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func (a *API) GetProjects() (projects Projects, err error) {
 
 // GetProject return the details of a project given a project id
 func (a *API) GetProject(projectId string) (project *Project, err error) {
-	res, err := a.client.DoGet("/cloud/project/" + projectId)
+	res, err := a.client.Get("/cloud/project/" + projectId)
 	if err != nil {
 		return nil, err
 	}
@@ -169,7 +169,7 @@ func (a *API) GetProjectByName(projectName string) (project *Project, err error)
 // GetRegions returns the list of valid regions for a given project
 func (a *API) GetRegions(projectId string) (regions Regions, err error) {
 	url := fmt.Sprintf("/cloud/project/%s/region", projectId)
-	res, err := a.client.DoGet(url)
+	res, err := a.client.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -185,7 +185,7 @@ func (a *API) GetRegions(projectId string) (regions Regions, err error) {
 // GetFlavors returns the list of available flavors for a given project in a giver zone
 func (a *API) GetFlavors(projectId, region string) (flavors Flavors, err error) {
 	url := fmt.Sprintf("/cloud/project/%s/flavor?region=%s", projectId, region)
-	res, err := a.client.DoGet(url)
+	res, err := a.client.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -224,7 +224,7 @@ func (a *API) GetFlavorByName(projectId, region, flavorName string) (flavor *Fla
 // GetImages returns a list of images for a given project in a given region
 func (a *API) GetImages(projectId, region string) (images Images, err error) {
 	url := fmt.Sprintf("/cloud/project/%s/image?osType=linux&region=%s", projectId, region)
-	res, err := a.client.DoGet(url)
+	res, err := a.client.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -267,7 +267,7 @@ func (a *API) CreateSshkey(projectId, name, pubkey string) (sshkey *Sshkey, err 
 	sshkeyreq.PublicKey = pubkey
 
 	url := fmt.Sprintf("/cloud/project/%s/sshkey", projectId)
-	res, err := a.client.DoPost(url, sshkeyreq)
+	res, err := a.client.Post(url, sshkeyreq)
 	if err != nil {
 		return nil, err
 	}
@@ -283,7 +283,7 @@ func (a *API) CreateSshkey(projectId, name, pubkey string) (sshkey *Sshkey, err 
 // DeleteSshKey deletes an existing sshkey
 func (a *API) DeleteSshkey(projectId, instanceId string) (err error) {
 	url := fmt.Sprintf("/cloud/project/%s/sshkey/%s", projectId, instanceId)
-	_, err = a.client.DoDelete(url)
+	_, err = a.client.Delete(url)
 	return err
 }
 
@@ -298,7 +298,7 @@ func (a *API) CreateInstance(projectId, name, pubkeyId, flavorId, ImageId, regio
 	instanceReq.MonthlyBilling = monthlyBilling
 
 	url := fmt.Sprintf("/cloud/project/%s/instance", projectId)
-	res, err := a.client.DoPost(url, instanceReq)
+	res, err := a.client.Post(url, instanceReq)
 	if err != nil {
 		return nil, err
 	}
@@ -321,7 +321,7 @@ func (a *API) RebootInstance(projectId, instanceId string, hard bool) (err error
 	}
 
 	url := fmt.Sprintf("/cloud/project/%s/instance/%s", projectId, instanceId)
-	_, err = a.client.DoPost(url, rebootReq)
+	_, err = a.client.Post(url, rebootReq)
 
 	return err
 }
@@ -329,13 +329,13 @@ func (a *API) RebootInstance(projectId, instanceId string, hard bool) (err error
 // DeleteInstance stops and destroys a public cloud instance
 func (a *API) DeleteInstance(projectId, instanceId string) (err error) {
 	url := fmt.Sprintf("/cloud/project/%s/instance/%s", projectId, instanceId)
-	_, err = a.client.DoDelete(url)
+	_, err = a.client.Delete(url)
 	return err
 }
 
 func (a *API) GetInstance(projectId, instanceId string) (instance *Instance, err error) {
 	url := fmt.Sprintf("/cloud/project/%s/instance/%s", projectId, instanceId)
-	res, err := a.client.DoGet(url)
+	res, err := a.client.Get(url)
 	if err != nil {
 		return nil, err
 	}

@@ -4,571 +4,91 @@
 		{
 			"importpath": "github.com/docker/docker/pkg/term",
 			"repository": "https://github.com/docker/docker",
-			"revision": "f187bdbb9b954a3c617442a0e2c8310af1cc1439",
+			"revision": "82c47088db8a0b460df81e5c2c7a099989ba48b8",
 			"branch": "master",
 			"path": "/pkg/term"
 		},
 		{
-			"importpath": "github.com/docker/machine/drivers/openstack",
-			"repository": "https://github.com/docker/machine",
-			"revision": "48554182f13ba73dd96d124f4fdcb6789dec5efe",
-			"branch": "master",
-			"path": "/drivers/openstack"
-		},
-		{
 			"importpath": "github.com/docker/machine/libmachine/drivers",
 			"repository": "https://github.com/docker/machine",
-			"revision": "48554182f13ba73dd96d124f4fdcb6789dec5efe",
+			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
 			"branch": "master",
 			"path": "/libmachine/drivers"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/drivers/plugin",
 			"repository": "https://github.com/docker/machine",
-			"revision": "48554182f13ba73dd96d124f4fdcb6789dec5efe",
+			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
 			"branch": "master",
 			"path": "/libmachine/drivers/plugin"
 		},
 		{
-			"importpath": "github.com/docker/machine/libmachine/drivers/plugin/localbinary",
-			"repository": "https://github.com/docker/machine",
-			"revision": "f00b0b83cff83eb1f7517d6a3d58fdb5b034251b",
-			"branch": "master",
-			"path": "/libmachine/drivers/plugin/localbinary"
-		},
-		{
-			"importpath": "github.com/docker/machine/libmachine/drivers/rpc",
-			"repository": "https://github.com/docker/machine",
-			"revision": "f00b0b83cff83eb1f7517d6a3d58fdb5b034251b",
-			"branch": "master",
-			"path": "/libmachine/drivers/rpc"
-		},
-		{
 			"importpath": "github.com/docker/machine/libmachine/log",
 			"repository": "https://github.com/docker/machine",
-			"revision": "48554182f13ba73dd96d124f4fdcb6789dec5efe",
+			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
 			"branch": "master",
 			"path": "/libmachine/log"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/mcnflag",
 			"repository": "https://github.com/docker/machine",
-			"revision": "48554182f13ba73dd96d124f4fdcb6789dec5efe",
+			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
 			"branch": "master",
 			"path": "/libmachine/mcnflag"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/mcnutils",
 			"repository": "https://github.com/docker/machine",
-			"revision": "48554182f13ba73dd96d124f4fdcb6789dec5efe",
+			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
 			"branch": "master",
 			"path": "/libmachine/mcnutils"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/ssh",
 			"repository": "https://github.com/docker/machine",
-			"revision": "48554182f13ba73dd96d124f4fdcb6789dec5efe",
+			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
 			"branch": "master",
 			"path": "/libmachine/ssh"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/state",
 			"repository": "https://github.com/docker/machine",
-			"revision": "48554182f13ba73dd96d124f4fdcb6789dec5efe",
+			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
 			"branch": "master",
 			"path": "/libmachine/state"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/version",
 			"repository": "https://github.com/docker/machine",
-			"revision": "48554182f13ba73dd96d124f4fdcb6789dec5efe",
+			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
 			"branch": "master",
 			"path": "/libmachine/version"
 		},
 		{
-			"importpath": "github.com/mitchellh/go-homedir",
-			"repository": "https://github.com/mitchellh/go-homedir",
-			"revision": "d682a8f0cf139663a984ff12528da460ca963de9",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/mitchellh/mapstructure",
-			"repository": "https://github.com/mitchellh/mapstructure",
-			"revision": "281073eb9eb092240d33ef253c404f1cca550309",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/acceptance/openstack/networking/v2",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/acceptance/openstack/networking/v2"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/blockstorage/v1/snapshots"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/blockstorage/v1/volumes"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumetypes",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/blockstorage/v1/volumetypes"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/cdn/v1/base",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/cdn/v1/base"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/cdn/v1/flavors",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/cdn/v1/flavors"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/cdn/v1/serviceassets",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/cdn/v1/serviceassets"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/cdn/v1/services",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/cdn/v1/services"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/common/extensions",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/common/extensions"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/extensions/bootfromvolume"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/diskconfig",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/extensions/diskconfig"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/floatingip",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/extensions/floatingip"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/extensions/keypairs"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/secgroups",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/extensions/secgroups"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/startstop",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/extensions/startstop"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/extensions/volumeattach"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/flavors",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/flavors"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/images",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/images"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/compute/v2/servers",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/compute/v2/servers"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/db/v1/configurations",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/db/v1/configurations"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/db/v1/databases",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/db/v1/databases"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/db/v1/datastores",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/db/v1/datastores"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/db/v1/flavors",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/db/v1/flavors"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/db/v1/instances",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/db/v1/instances"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/db/v1/users",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/db/v1/users"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/identity/v2/extensions/admin/roles",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/identity/v2/extensions/admin/roles"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/identity/v2/tenants",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/identity/v2/tenants"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/identity/v2/tokens",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/identity/v2/tokens"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/identity/v2/users",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/identity/v2/users"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/identity/v3/tokens",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/identity/v3/tokens"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/layer3/floatingips",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/networking/v2/extensions/layer3/floatingips"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/lbaas/monitors",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/networking/v2/extensions/lbaas/monitors"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/lbaas/pools",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/networking/v2/extensions/lbaas/pools"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/networking/v2/extensions/security/groups"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/networking/v2/extensions/security/rules"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/networking/v2/networks",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/networking/v2/networks"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/networking/v2/ports",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/networking/v2/ports"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/networking/v2/subnets",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/networking/v2/subnets"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/objectstorage/v1/accounts"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/objectstorage/v1/containers"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/objectstorage/v1/objects"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/orchestration/v1/buildinfo",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/orchestration/v1/buildinfo"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/orchestration/v1/stackevents"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/orchestration/v1/stackresources"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stacks",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/orchestration/v1/stacks"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stacktemplates",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/orchestration/v1/stacktemplates"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/openstack/utils",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/openstack/utils"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/pagination",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/pagination"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace/db/v1/backups",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace/db/v1/backups"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace/identity/v2/tokens",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace/identity/v2/tokens"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace/lb/v1/acl",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace/lb/v1/acl"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace/lb/v1/monitors",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace/lb/v1/monitors"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace/lb/v1/nodes",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace/lb/v1/nodes"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace/lb/v1/sessions",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace/lb/v1/sessions"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace/lb/v1/throttle",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace/lb/v1/throttle"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace/lb/v1/vips",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace/lb/v1/vips"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/cdncontainers",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/rackspace/objectstorage/v1/cdncontainers"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/testhelper",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/testhelper"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/testhelper/client",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/testhelper/client"
-		},
-		{
-			"importpath": "github.com/rackspace/gophercloud/testhelper/fixture",
-			"repository": "https://github.com/rackspace/gophercloud",
-			"revision": "761cff8afb6a8e7f42c5554a90dae72f341bb481",
-			"branch": "master",
-			"path": "/testhelper/fixture"
-		},
-		{
-			"importpath": "github.com/yadutaf/go-ovh/ovh",
+			"importpath": "github.com/yadutaf/go-ovh",
 			"repository": "https://github.com/yadutaf/go-ovh",
-			"revision": "7e4d794cd03a2e7372e25c2f22ed39de21ff5992",
-			"branch": "master",
-			"path": "/ovh"
+			"revision": "db89abbf34c6d50601946e7fd332ad1c5ec2d1f3",
+			"branch": "master"
 		},
 		{
 			"importpath": "golang.org/x/crypto/curve25519",
 			"repository": "https://go.googlesource.com/crypto",
-			"revision": "beef0f4390813b96e8e68fd78570396d0f4751fc",
+			"revision": "7b85b097bf7527677d54d3220065e966a0e3b613",
 			"branch": "master",
 			"path": "/curve25519"
 		},
 		{
 			"importpath": "golang.org/x/crypto/ssh",
 			"repository": "https://go.googlesource.com/crypto",
-			"revision": "beef0f4390813b96e8e68fd78570396d0f4751fc",
+			"revision": "7b85b097bf7527677d54d3220065e966a0e3b613",
 			"branch": "master",
 			"path": "/ssh"
 		},
 		{
 			"importpath": "gopkg.in/ini.v1",
 			"repository": "https://gopkg.in/ini.v1",
-			"revision": "03e0e7d51a13a91c765d8d0161246bc14a38001a",
+			"revision": "3c269131850c1675ec461a706c9a2a25bc2e0b10",
 			"branch": "v1"
-		},
-		{
-			"importpath": "gopkg.in/yaml.v2",
-			"repository": "https://gopkg.in/yaml.v2",
-			"revision": "53feefa2559fb8dfa8d81baad31be332c97d6c77",
-			"branch": "v2"
 		}
 	]
 }

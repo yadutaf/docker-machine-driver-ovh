@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	StatusTimeout = 200
+	statusTimeout = 200
 )
 
 // Driver is a machine driver for OVH.
@@ -28,12 +28,12 @@ type Driver struct {
 	RegionName  string
 
 	// Internal ids
-	ProjectId   string
-	FlavorId    string
-	ImageId     string
-	InstanceId  string
+	ProjectID   string
+	FlavorID    string
+	ImageID     string
+	InstanceID  string
 	KeyPairName string
-	KeyPairId   string
+	KeyPairID   string
 
 	// Overloaded credentials
 	ApplicationKey    string
@@ -134,7 +134,7 @@ func (d *Driver) PreCreateCheck() error {
 		if err != nil {
 			return err
 		}
-		d.ProjectId = project.Id
+		d.ProjectID = project.Id
 	} else {
 		projects, err := client.GetProjects()
 		if err != nil {
@@ -143,18 +143,18 @@ func (d *Driver) PreCreateCheck() error {
 
 		// If there is only one project, take it
 		if len(projects) == 1 {
-			d.ProjectId = projects[0]
+			d.ProjectID = projects[0]
 		} else if len(projects) == 0 {
 			return fmt.Errorf("No Cloud project could be found. To create a new one, please visit %s", CustomerInterface)
 		} else {
 			return fmt.Errorf("Multiple Cloud project found, to select one, use '--ovh-project' option")
 		}
 	}
-	log.Debug("Found project id ", d.ProjectId)
+	log.Debug("Found project id ", d.ProjectID)
 
 	// Validate region
 	log.Debug("Validating region")
-	regions, err := client.GetRegions(d.ProjectId)
+	regions, err := client.GetRegions(d.ProjectID)
 	if err != nil {
 		return err
 	}
@@ -166,26 +166,26 @@ func (d *Driver) PreCreateCheck() error {
 		}
 	}
 	if ok != true {
-		return fmt.Errorf("Invalid region %s. For a list of valid ovh regions, please visis %s", CustomerInterface)
+		return fmt.Errorf("Invalid region %s. For a list of valid ovh regions, please visis %s", d.RegionName, CustomerInterface)
 	}
 
 	// Validate flavor
 	log.Debug("Validating flavor")
-	flavor, err := client.GetFlavorByName(d.ProjectId, d.RegionName, d.FlavorName)
+	flavor, err := client.GetFlavorByName(d.ProjectID, d.RegionName, d.FlavorName)
 	if err != nil {
 		return err
 	}
-	d.FlavorId = flavor.Id
-	log.Debug("Found flavor id ", d.FlavorId)
+	d.FlavorID = flavor.Id
+	log.Debug("Found flavor id ", d.FlavorID)
 
 	// Validate image
 	log.Debug("Validating image")
-	image, err := client.GetImageByName(d.ProjectId, d.RegionName, ImageName)
+	image, err := client.GetImageByName(d.ProjectID, d.RegionName, ImageName)
 	if err != nil {
 		return err
 	}
-	d.ImageId = image.Id
-	log.Debug("Found image id ", d.ImageId)
+	d.ImageID = image.Id
+	log.Debug("Found image id ", d.ImageID)
 
 	// Create Key pair name
 	d.KeyPairName = fmt.Sprintf("%s-%s", d.MachineName, mcnutils.GenerateRandomID())
@@ -209,24 +209,24 @@ func (d *Driver) createSSHKey() error {
 
 	// Upload key
 	client := d.getClient()
-	sshKey, err := client.CreateSshkey(d.ProjectId, d.KeyPairName, string(publicKey))
+	sshKey, err := client.CreateSshkey(d.ProjectID, d.KeyPairName, string(publicKey))
 	if err != nil {
 		return err
 	}
-	d.KeyPairId = sshKey.Id
+	d.KeyPairID = sshKey.Id
 
-	log.Debug("Created key id ", d.KeyPairId)
+	log.Debug("Created key id ", d.KeyPairID)
 	return nil
 }
 
 // waitForInstanceStatus waits until instance reaches status. Copied from openstack Driver
 func (d *Driver) waitForInstanceStatus(status string) (instance *Instance, err error) {
 	return instance, mcnutils.WaitForSpecificOrError(func() (bool, error) {
-		instance, err = d.client.GetInstance(d.ProjectId, d.InstanceId)
+		instance, err = d.client.GetInstance(d.ProjectID, d.InstanceID)
 		if err != nil {
 			return true, err
 		}
-		log.WithField("MachineId", d.MachineId).WithField("Status", instance.Status).Debug("Machine state")
+		log.WithField("MachineId", d.InstanceID).Debugf("Machine state: %s", instance.Status)
 
 		if instance.Status == "ERROR" {
 			return true, fmt.Errorf("Instance creation failed. Instance is in ERROR state")
@@ -237,7 +237,7 @@ func (d *Driver) waitForInstanceStatus(status string) (instance *Instance, err e
 		}
 
 		return false, nil
-	}, (StatusTimeout / 4), 4*time.Second)
+	}, (statusTimeout / 4), 4*time.Second)
 }
 
 // GetSSHHostname returns the hostname for SSH
@@ -245,6 +245,7 @@ func (d *Driver) GetSSHHostname() (string, error) {
 	return d.IPAddress, nil
 }
 
+// Create a new docker machine instance on OVH Cloud
 func (d *Driver) Create() error {
 	client := d.getClient()
 
@@ -257,21 +258,21 @@ func (d *Driver) Create() error {
 	// Create instance
 	log.Debug("Creating OVH instance...")
 	instance, err := client.CreateInstance(
-		d.ProjectId,
+		d.ProjectID,
 		d.MachineName,
-		d.KeyPairId,
-		d.FlavorId,
-		d.ImageId,
+		d.KeyPairID,
+		d.FlavorID,
+		d.ImageID,
 		d.RegionName,
 		false,
 	)
 	if err != nil {
 		return err
 	}
-	d.InstanceId = instance.Id
+	d.InstanceID = instance.Id
 
 	// Wait until instance is ACTIVE
-	log.WithField("MachineId", d.InstanceId).Debug("Waiting for OVH instance...")
+	log.WithField("MachineId", d.InstanceID).Debug("Waiting for OVH instance...")
 	instance, err = d.waitForInstanceStatus("ACTIVE")
 	if err != nil {
 		return err
@@ -292,7 +293,7 @@ func (d *Driver) Create() error {
 
 	log.WithFields(log.Fields{
 		"IP":        d.IPAddress,
-		"MachineId": d.InstanceId,
+		"MachineId": d.InstanceID,
 	}).Debug("IP address found")
 
 	// All done !
@@ -305,17 +306,17 @@ func (d *Driver) publicSSHKeyPath() string {
 
 // GetState return instance status
 func (d *Driver) GetState() (state.State, error) {
-	log.WithField("MachineId", d.InstanceId).Debug("Get status for OVH instance...")
+	log.WithField("MachineId", d.InstanceID).Debug("Get status for OVH instance...")
 
 	client := d.getClient()
 
-	instance, err := client.GetInstance(d.ProjectId, d.InstanceId)
+	instance, err := client.GetInstance(d.ProjectID, d.InstanceID)
 	if err != nil {
 		return state.None, err
 	}
 
 	log.WithFields(log.Fields{
-		"MachineId": d.InstanceId,
+		"MachineId": d.InstanceID,
 		"State":     instance.Status,
 	}).Debug("State for OVH instance")
 
@@ -337,6 +338,7 @@ func (d *Driver) GetState() (state.State, error) {
 	return state.None, nil
 }
 
+// GetURL returns docker daemon URL on this machine
 func (d *Driver) GetURL() (string, error) {
 	if d.IPAddress == "" {
 		return "", nil
@@ -344,21 +346,22 @@ func (d *Driver) GetURL() (string, error) {
 	return fmt.Sprintf("tcp://%s", net.JoinHostPort(d.IPAddress, "2376")), nil
 }
 
+// Remove deletes a machine and it's SSH keys from OVH Cloud
 func (d *Driver) Remove() error {
-	log.WithField("MachineId", d.InstanceId).Debug("deleting instance...")
+	log.WithField("MachineId", d.InstanceID).Debug("deleting instance...")
 	log.Info("Deleting OVH instance...")
 
 	client := d.getClient()
 
 	// Deletes instance
-	err := client.DeleteInstance(d.ProjectId, d.InstanceId)
+	err := client.DeleteInstance(d.ProjectID, d.InstanceID)
 	if err != nil {
 		return err
 	}
 
 	// Deletes ssh key
-	log.WithField("KeyPairId", d.KeyPairId).Debug("deleting key pair...")
-	err = client.DeleteSshkey(d.ProjectId, d.KeyPairId)
+	log.WithField("KeyPairID", d.KeyPairID).Debug("deleting key pair...")
+	err = client.DeleteSshkey(d.ProjectID, d.KeyPairID)
 	if err != nil {
 		return err
 	}
@@ -366,12 +369,13 @@ func (d *Driver) Remove() error {
 	return nil
 }
 
+// Restart this docker-machine
 func (d *Driver) Restart() error {
-	log.WithField("MachineId", d.InstanceId).Info("Restarting OVH instance...")
+	log.WithField("MachineId", d.InstanceID).Info("Restarting OVH instance...")
 
 	client := d.getClient()
 
-	err := client.RebootInstance(d.ProjectId, d.InstanceId, false)
+	err := client.RebootInstance(d.ProjectID, d.InstanceID, false)
 	if err != nil {
 		return err
 	}
@@ -381,12 +385,18 @@ func (d *Driver) Restart() error {
 //
 // STUBS
 //
+
+// Kill (STUB) kill machine
 func (d *Driver) Kill() (err error) {
 	return fmt.Errorf("Killing machines is not possible on OVH Cloud")
 }
+
+// Start (STUB) start machine
 func (d *Driver) Start() (err error) {
 	return fmt.Errorf("Starting machines is not possible on OVH Cloud")
 }
+
+// Stop (STUB) stop machine
 func (d *Driver) Stop() (err error) {
 	return fmt.Errorf("Stopping machines is not possible on OVH Cloud")
 }
