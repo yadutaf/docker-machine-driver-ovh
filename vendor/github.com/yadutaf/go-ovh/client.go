@@ -245,9 +245,6 @@ func (c *Client) getTimeDelta() int64 {
 
 // Call calls OVH's API and signs the request if ``needAuth`` is ``true``
 func (c *Client) Call(method, path string, data interface{}, needAuth bool) (*APIResponse, error) {
-	target := fmt.Sprintf("%s%s", c.endpoint, path)
-	timestamp := time.Now().Unix() - c.getTimeDelta()
-
 	var body []byte
 	var err error
 
@@ -258,6 +255,7 @@ func (c *Client) Call(method, path string, data interface{}, needAuth bool) (*AP
 		}
 	}
 
+	target := fmt.Sprintf("%s%s", c.endpoint, path)
 	req, err := http.NewRequest(method, target, bytes.NewReader(body))
 	if err != nil {
 		return nil, err
@@ -271,6 +269,8 @@ func (c *Client) Call(method, path string, data interface{}, needAuth bool) (*AP
 	// Some methods do not need authentication, especially /time, /auth and some
 	// /order methods are actually broken if authenticated.
 	if needAuth {
+		timestamp := time.Now().Unix() - c.getTimeDelta()
+
 		req.Header.Add("X-Ovh-Timestamp", fmt.Sprintf("%d", timestamp))
 		req.Header.Add("X-Ovh-Consumer", c.consumerKey)
 		req.Header.Add("Accept", "application/json")

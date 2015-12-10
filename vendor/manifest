@@ -2,72 +2,78 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/Sirupsen/logrus",
+			"repository": "https://github.com/Sirupsen/logrus",
+			"revision": "446d1c146faa8ed3f4218f056fcd165f6bcfda81",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/docker/docker/pkg/term",
 			"repository": "https://github.com/docker/docker",
-			"revision": "82c47088db8a0b460df81e5c2c7a099989ba48b8",
+			"revision": "9381c744b89bf006e90483738601a24323647678",
 			"branch": "master",
 			"path": "/pkg/term"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/drivers",
 			"repository": "https://github.com/docker/machine",
-			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
+			"revision": "a5eb979f095fd2fe27073653fb01086b4727f939",
 			"branch": "master",
 			"path": "/libmachine/drivers"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/drivers/plugin",
 			"repository": "https://github.com/docker/machine",
-			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
+			"revision": "a5eb979f095fd2fe27073653fb01086b4727f939",
 			"branch": "master",
 			"path": "/libmachine/drivers/plugin"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/log",
 			"repository": "https://github.com/docker/machine",
-			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
+			"revision": "a5eb979f095fd2fe27073653fb01086b4727f939",
 			"branch": "master",
 			"path": "/libmachine/log"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/mcnflag",
 			"repository": "https://github.com/docker/machine",
-			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
+			"revision": "a5eb979f095fd2fe27073653fb01086b4727f939",
 			"branch": "master",
 			"path": "/libmachine/mcnflag"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/mcnutils",
 			"repository": "https://github.com/docker/machine",
-			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
+			"revision": "a5eb979f095fd2fe27073653fb01086b4727f939",
 			"branch": "master",
 			"path": "/libmachine/mcnutils"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/ssh",
 			"repository": "https://github.com/docker/machine",
-			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
+			"revision": "a5eb979f095fd2fe27073653fb01086b4727f939",
 			"branch": "master",
 			"path": "/libmachine/ssh"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/state",
 			"repository": "https://github.com/docker/machine",
-			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
+			"revision": "a5eb979f095fd2fe27073653fb01086b4727f939",
 			"branch": "master",
 			"path": "/libmachine/state"
 		},
 		{
 			"importpath": "github.com/docker/machine/libmachine/version",
 			"repository": "https://github.com/docker/machine",
-			"revision": "a277bc6c0afed21e974e6e60014529b9568f0ac0",
+			"revision": "a5eb979f095fd2fe27073653fb01086b4727f939",
 			"branch": "master",
 			"path": "/libmachine/version"
 		},
 		{
 			"importpath": "github.com/yadutaf/go-ovh",
 			"repository": "https://github.com/yadutaf/go-ovh",
-			"revision": "db89abbf34c6d50601946e7fd332ad1c5ec2d1f3",
+			"revision": "8f1936922e7ec639a31042100beef7b30401eb80",
 			"branch": "master"
 		},
 		{
@@ -87,7 +93,7 @@
 		{
 			"importpath": "gopkg.in/ini.v1",
 			"repository": "https://gopkg.in/ini.v1",
-			"revision": "3c269131850c1675ec461a706c9a2a25bc2e0b10",
+			"revision": "9314fb0ef64171d6a3d0a4fa570dfa33441cba05",
 			"branch": "v1"
 		}
 	]
