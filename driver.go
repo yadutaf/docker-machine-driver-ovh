@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net"
+	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/docker/machine/libmachine/drivers"
@@ -81,6 +84,11 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			Usage: "OVH Cloud flavor name or id. Default: vps-ssd-1",
 			Value: DefaultFlavorName,
 		},
+		mcnflag.StringFlag{
+			Name:  "ovh-ssh-key",
+			Usage: "OVH Cloud ssh key name or id to use. Default: generate a random name",
+			Value: "",
+		},
 	}
 }
 
@@ -112,6 +120,7 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.ProjectName = flags.String("ovh-project")
 	d.RegionName = flags.String("ovh-region")
 	d.FlavorName = flags.String("ovh-flavor")
+	d.KeyPairName = flags.String("ovh-ssh-key")
 
 	// Swarm configuration, must be in each driver
 	d.SwarmMaster = flags.Bool("swarm-master")
@@ -187,18 +196,39 @@ func (d *Driver) PreCreateCheck() error {
 	d.ImageID = image.Id
 	log.Debug("Found image id ", d.ImageID)
 
-	// Create Key pair name
-	d.KeyPairName = fmt.Sprintf("%s-%s", d.MachineName, mcnutils.GenerateRandomID())
+	// Use a common key or create a machine specific one
+	if len(d.KeyPairName) != 0 {
+		d.SSHKeyPath = filepath.Join(d.StorePath, "sshkeys", d.KeyPairName)
+	} else {
+		d.KeyPairName = fmt.Sprintf("%s-%s", d.MachineName, mcnutils.GenerateRandomID())
+	}
 
 	return nil
 }
 
-// createSSHKey creates an SSH key for the machine and uploads it
-func (d *Driver) createSSHKey() error {
-	log.WithField("Name", d.KeyPairName).Debug("Creating Key Pair...")
+// ensureSSHKey makes sure an SSH key for the machine exists with requested name
+func (d *Driver) ensureSSHKey() error {
+	client := d.getClient()
 
-	// Generate key
-	err := ssh.GenerateSSHKey(d.GetSSHKeyPath())
+	// Attempt to get an existing key
+	log.WithField("Name", d.KeyPairName).Debug("Checking Key Pair...")
+	sshKey, _ := client.GetSshkeyByName(d.ProjectID, d.RegionName, d.KeyPairName)
+	if sshKey != nil {
+		d.KeyPairID = sshKey.Id
+		log.Debug("Found key id ", d.KeyPairID)
+		return nil
+	}
+
+	// Generate key and parent dir if needed
+	log.WithField("Name", d.KeyPairName).Debug("Creating Key Pair...")
+	keyfile := d.GetSSHKeyPath()
+	keypath := filepath.Dir(keyfile)
+	err := os.MkdirAll(keypath, 0700)
+	if err != nil {
+		return err
+	}
+
+	err = ssh.GenerateSSHKey(d.GetSSHKeyPath())
 	if err != nil {
 		return err
 	}
@@ -208,8 +238,7 @@ func (d *Driver) createSSHKey() error {
 	}
 
 	// Upload key
-	client := d.getClient()
-	sshKey, err := client.CreateSshkey(d.ProjectID, d.KeyPairName, string(publicKey))
+	sshKey, err = client.CreateSshkey(d.ProjectID, d.KeyPairName, string(publicKey))
 	if err != nil {
 		return err
 	}
@@ -249,8 +278,8 @@ func (d *Driver) GetSSHHostname() (string, error) {
 func (d *Driver) Create() error {
 	client := d.getClient()
 
-	// Create ssh key
-	err := d.createSSHKey()
+	// Ensure ssh key
+	err := d.ensureSSHKey()
 	if err != nil {
 		return err
 	}
@@ -357,6 +386,12 @@ func (d *Driver) Remove() error {
 	err := client.DeleteInstance(d.ProjectID, d.InstanceID)
 	if err != nil {
 		return err
+	}
+
+	// If key name  does not starts with the machine ID, this is a pre-existing key, keep it
+	if !strings.HasPrefix(d.KeyPairName, d.MachineName) {
+		log.WithField("KeyPairID", d.KeyPairID).Debug("keeping key pair...")
+		return nil
 	}
 
 	// Deletes ssh key

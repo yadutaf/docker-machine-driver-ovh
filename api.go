@@ -63,6 +63,7 @@ type Sshkey struct {
 	Fingerprint string  `json:"fingerPrint"`
 	Regions     Regions `json:"region"`
 }
+type Sshkeys []Sshkey
 
 type Ip struct {
 	Ip   string `json:"ip"`
@@ -258,6 +259,41 @@ func (a *API) GetImageByName(projectId, region, imageName string) (image *Image,
 
 	// Ooops
 	return nil, fmt.Errorf("Image '%s' does not exist on OVH cloud. To find a list of available images, please visit %s", imageName, CustomerInterface)
+}
+
+// GetSshkeys returns a list of sshkeys for a given project in a given region
+func (a *API) GetSshkeys(projectId, region string) (sshkeys Sshkeys, err error) {
+	url := fmt.Sprintf("/cloud/project/%s/sshkey?region=%s", projectId, region)
+	res, err := a.client.Get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(res.Body, &sshkeys)
+	if err != nil {
+		return nil, err
+	}
+
+	return sshkeys, nil
+}
+
+// GetSshkeyByName returns the details of an ssh key given its name in a given region. This is slower than id access
+func (a *API) GetSshkeyByName(projectId, region, sshKeyName string) (sshkey *Sshkey, err error) {
+	// Get sshkey list
+	sshkeys, err := a.GetSshkeys(projectId, region)
+	if err != nil {
+		return nil, err
+	}
+
+	// Find first matching sshkey
+	for _, sshkey := range sshkeys {
+		if sshkey.Id == sshKeyName || sshkey.Name == sshKeyName {
+			return &sshkey, nil
+		}
+	}
+
+	// Ooops
+	return nil, fmt.Errorf("SSH key '%s' does not exist on OVH cloud. To find a list of available ssh keys, please visit %s", sshKeyName, CustomerInterface)
 }
 
 // CreateSshkey uploads a new public key with name and returns resulting object
