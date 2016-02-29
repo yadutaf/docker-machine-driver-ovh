@@ -211,7 +211,7 @@ func (d *Driver) ensureSSHKey() error {
 	client := d.getClient()
 
 	// Attempt to get an existing key
-	log.WithField("Name", d.KeyPairName).Debug("Checking Key Pair...")
+	log.Debug("Checking Key Pair...", map[string]interface{}{"Name": d.KeyPairName})
 	sshKey, _ := client.GetSshkeyByName(d.ProjectID, d.RegionName, d.KeyPairName)
 	if sshKey != nil {
 		d.KeyPairID = sshKey.Id
@@ -220,7 +220,7 @@ func (d *Driver) ensureSSHKey() error {
 	}
 
 	// Generate key and parent dir if needed
-	log.WithField("Name", d.KeyPairName).Debug("Creating Key Pair...")
+	log.Debug("Creating Key Pair...", map[string]interface{}{"Name": d.KeyPairName})
 	keyfile := d.GetSSHKeyPath()
 	keypath := filepath.Dir(keyfile)
 	err := os.MkdirAll(keypath, 0700)
@@ -255,7 +255,10 @@ func (d *Driver) waitForInstanceStatus(status string) (instance *Instance, err e
 		if err != nil {
 			return true, err
 		}
-		log.WithField("MachineId", d.InstanceID).Debugf("Machine state: %s", instance.Status)
+		log.Debugf("Machine", map[string]interface{}{
+			"Name":  d.KeyPairName,
+			"State": instance.Status,
+		})
 
 		if instance.Status == "ERROR" {
 			return true, fmt.Errorf("Instance creation failed. Instance is in ERROR state")
@@ -301,7 +304,7 @@ func (d *Driver) Create() error {
 	d.InstanceID = instance.Id
 
 	// Wait until instance is ACTIVE
-	log.WithField("MachineId", d.InstanceID).Debug("Waiting for OVH instance...")
+	log.Debugf("Waiting for OVH instance...", map[string]interface{}{"MachineId": d.InstanceID})
 	instance, err = d.waitForInstanceStatus("ACTIVE")
 	if err != nil {
 		return err
@@ -320,10 +323,10 @@ func (d *Driver) Create() error {
 		return fmt.Errorf("No IP found for instance %s", instance.Id)
 	}
 
-	log.WithFields(log.Fields{
-		"IP":        d.IPAddress,
+	log.Debugf("IP address found", map[string]interface{}{
 		"MachineId": d.InstanceID,
-	}).Debug("IP address found")
+		"IP":        d.IPAddress,
+	})
 
 	// All done !
 	return nil
@@ -335,7 +338,7 @@ func (d *Driver) publicSSHKeyPath() string {
 
 // GetState return instance status
 func (d *Driver) GetState() (state.State, error) {
-	log.WithField("MachineId", d.InstanceID).Debug("Get status for OVH instance...")
+	log.Debugf("Get status for OVH instance...", map[string]interface{}{"MachineId": d.InstanceID})
 
 	client := d.getClient()
 
@@ -344,10 +347,10 @@ func (d *Driver) GetState() (state.State, error) {
 		return state.None, err
 	}
 
-	log.WithFields(log.Fields{
+	log.Debugf("OVH instance", map[string]interface{}{
 		"MachineId": d.InstanceID,
 		"State":     instance.Status,
-	}).Debug("State for OVH instance")
+	})
 
 	switch instance.Status {
 	case "ACTIVE":
@@ -377,7 +380,7 @@ func (d *Driver) GetURL() (string, error) {
 
 // Remove deletes a machine and it's SSH keys from OVH Cloud
 func (d *Driver) Remove() error {
-	log.WithField("MachineId", d.InstanceID).Debug("deleting instance...")
+	log.Debugf("deleting instance...", map[string]interface{}{"MachineId": d.InstanceID})
 	log.Info("Deleting OVH instance...")
 
 	client := d.getClient()
@@ -390,12 +393,12 @@ func (d *Driver) Remove() error {
 
 	// If key name  does not starts with the machine ID, this is a pre-existing key, keep it
 	if !strings.HasPrefix(d.KeyPairName, d.MachineName) {
-		log.WithField("KeyPairID", d.KeyPairID).Debug("keeping key pair...")
+		log.Debugf("keeping key pair...", map[string]interface{}{"KeyPairID": d.KeyPairID})
 		return nil
 	}
 
 	// Deletes ssh key
-	log.WithField("KeyPairID", d.KeyPairID).Debug("deleting key pair...")
+	log.Debugf("deleting key pair...", map[string]interface{}{"KeyPairID": d.KeyPairID})
 	err = client.DeleteSshkey(d.ProjectID, d.KeyPairID)
 	if err != nil {
 		return err
@@ -406,7 +409,7 @@ func (d *Driver) Remove() error {
 
 // Restart this docker-machine
 func (d *Driver) Restart() error {
-	log.WithField("MachineId", d.InstanceID).Info("Restarting OVH instance...")
+	log.Debugf("Restarting OVH instance...", map[string]interface{}{"MachineID": d.InstanceID})
 
 	client := d.getClient()
 
