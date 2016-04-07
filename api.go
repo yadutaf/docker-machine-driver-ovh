@@ -275,6 +275,9 @@ func (a *API) CreateSshkey(projectID, name, pubkey string) (sshkey *Sshkey, err 
 func (a *API) DeleteSshkey(projectID, instanceID string) (err error) {
 	url := fmt.Sprintf("/cloud/project/%s/sshkey/%s", projectID, instanceID)
 	err = a.client.Delete(url, nil)
+	if apierror, ok := err.(*ovh.APIError); ok && apierror.Code == 404 {
+		err = nil
+	}
 	return err
 }
 
@@ -311,6 +314,9 @@ func (a *API) RebootInstance(projectID, instanceID string, hard bool) (err error
 func (a *API) DeleteInstance(projectID, instanceID string) (err error) {
 	url := fmt.Sprintf("/cloud/project/%s/instance/%s", projectID, instanceID)
 	err = a.client.Delete(url, nil)
+	if apierror, ok := err.(*ovh.APIError); ok && apierror.Code == 404 {
+		err = nil
+	}
 	return err
 }
 
