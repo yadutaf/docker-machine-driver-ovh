@@ -143,7 +143,7 @@ func (d *Driver) PreCreateCheck() error {
 		if err != nil {
 			return err
 		}
-		d.ProjectID = project.Id
+		d.ProjectID = project.ID
 	} else {
 		projects, err := client.GetProjects()
 		if err != nil {
@@ -184,7 +184,7 @@ func (d *Driver) PreCreateCheck() error {
 	if err != nil {
 		return err
 	}
-	d.FlavorID = flavor.Id
+	d.FlavorID = flavor.ID
 	log.Debug("Found flavor id ", d.FlavorID)
 
 	// Validate image
@@ -193,7 +193,7 @@ func (d *Driver) PreCreateCheck() error {
 	if err != nil {
 		return err
 	}
-	d.ImageID = image.Id
+	d.ImageID = image.ID
 	log.Debug("Found image id ", d.ImageID)
 
 	// Use a common key or create a machine specific one
@@ -214,7 +214,7 @@ func (d *Driver) ensureSSHKey() error {
 	log.Debug("Checking Key Pair...", map[string]interface{}{"Name": d.KeyPairName})
 	sshKey, _ := client.GetSshkeyByName(d.ProjectID, d.RegionName, d.KeyPairName)
 	if sshKey != nil {
-		d.KeyPairID = sshKey.Id
+		d.KeyPairID = sshKey.ID
 		log.Debug("Found key id ", d.KeyPairID)
 		return nil
 	}
@@ -242,7 +242,7 @@ func (d *Driver) ensureSSHKey() error {
 	if err != nil {
 		return err
 	}
-	d.KeyPairID = sshKey.Id
+	d.KeyPairID = sshKey.ID
 
 	log.Debug("Created key id ", d.KeyPairID)
 	return nil
@@ -301,10 +301,10 @@ func (d *Driver) Create() error {
 	if err != nil {
 		return err
 	}
-	d.InstanceID = instance.Id
+	d.InstanceID = instance.ID
 
 	// Wait until instance is ACTIVE
-	log.Debugf("Waiting for OVH instance...", map[string]interface{}{"MachineId": d.InstanceID})
+	log.Debugf("Waiting for OVH instance...", map[string]interface{}{"MachineID": d.InstanceID})
 	instance, err = d.waitForInstanceStatus("ACTIVE")
 	if err != nil {
 		return err
@@ -312,19 +312,19 @@ func (d *Driver) Create() error {
 
 	// Save Ip address
 	d.IPAddress = ""
-	for _, ip := range instance.IpAddresses {
+	for _, ip := range instance.IPAddresses {
 		if ip.Type == "public" {
-			d.IPAddress = ip.Ip
+			d.IPAddress = ip.IP
 			break
 		}
 	}
 
 	if d.IPAddress == "" {
-		return fmt.Errorf("No IP found for instance %s", instance.Id)
+		return fmt.Errorf("No IP found for instance %s", instance.ID)
 	}
 
 	log.Debugf("IP address found", map[string]interface{}{
-		"MachineId": d.InstanceID,
+		"MachineID": d.InstanceID,
 		"IP":        d.IPAddress,
 	})
 
@@ -338,7 +338,7 @@ func (d *Driver) publicSSHKeyPath() string {
 
 // GetState return instance status
 func (d *Driver) GetState() (state.State, error) {
-	log.Debugf("Get status for OVH instance...", map[string]interface{}{"MachineId": d.InstanceID})
+	log.Debugf("Get status for OVH instance...", map[string]interface{}{"MachineID": d.InstanceID})
 
 	client := d.getClient()
 
@@ -348,7 +348,7 @@ func (d *Driver) GetState() (state.State, error) {
 	}
 
 	log.Debugf("OVH instance", map[string]interface{}{
-		"MachineId": d.InstanceID,
+		"MachineID": d.InstanceID,
 		"State":     instance.Status,
 	})
 
@@ -380,7 +380,7 @@ func (d *Driver) GetURL() (string, error) {
 
 // Remove deletes a machine and it's SSH keys from OVH Cloud
 func (d *Driver) Remove() error {
-	log.Debugf("deleting instance...", map[string]interface{}{"MachineId": d.InstanceID})
+	log.Debugf("deleting instance...", map[string]interface{}{"MachineID": d.InstanceID})
 	log.Info("Deleting OVH instance...")
 
 	client := d.getClient()
