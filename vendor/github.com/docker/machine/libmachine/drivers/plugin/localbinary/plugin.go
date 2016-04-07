@@ -15,16 +15,17 @@ import (
 var (
 	// Timeout where we will bail if we're not able to properly contact the
 	// plugin server.
-	defaultTimeout = 10 * time.Second
-	CoreDrivers    = [...]string{"amazonec2", "azure", "digitalocean",
+	defaultTimeout               = 10 * time.Second
+	CurrentBinaryIsDockerMachine = false
+	CoreDrivers                  = [...]string{"amazonec2", "azure", "digitalocean",
 		"exoscale", "generic", "google", "hyperv", "none", "openstack",
 		"rackspace", "softlayer", "virtualbox", "vmwarefusion",
 		"vmwarevcloudair", "vmwarevsphere"}
 )
 
 const (
-	pluginOutPrefix     = "(%s) "
-	pluginErrPrefix     = "(%s) DBG | "
+	pluginOut           = "(%s) %s"
+	pluginErr           = "(%s) DBG | %s"
 	PluginEnvKey        = "MACHINE_PLUGIN_TOKEN"
 	PluginEnvVal        = "42"
 	PluginEnvDriverName = "MACHINE_PLUGIN_DRIVER_NAME"
@@ -32,12 +33,11 @@ const (
 
 type PluginStreamer interface {
 	// Return a channel for receiving the output of the stream line by
-	// line, and a channel for stopping the stream when we are finished
-	// reading from it.
+	// line.
 	//
 	// It happens to be the case that we do this all inside of the main
 	// plugin struct today, but that may not be the case forever.
-	AttachStream(*bufio.Scanner) (<-chan string, chan<- bool)
+	AttachStream(*bufio.Scanner) <-chan string
 }
 
 type PluginServer interface {
@@ -73,11 +73,13 @@ type Plugin struct {
 	MachineName string
 	addrCh      chan string
 	stopCh      chan bool
+	timeout     time.Duration
 }
 
 type Executor struct {
 	pluginStdout, pluginStderr io.ReadCloser
 	DriverName                 string
+	cmd                        *exec.Cmd
 	binaryPath                 string
 }
 
@@ -89,10 +91,19 @@ func (e ErrPluginBinaryNotFound) Error() string {
 	return fmt.Sprintf("Driver %q not found. Do you have the plugin binary accessible in your PATH?", e.driverName)
 }
 
+// driverPath finds the path of a driver binary by its name.
+//  + If the driver is a core driver, there is no separate driver binary. We reuse current binary if it's `docker-machine`
+// or we assume `docker-machine` is in the PATH.
+//  + If the driver is NOT a core driver, then the separate binary must be in the PATH and it's name must be
+// `docker-machine-driver-driverName`
 func driverPath(driverName string) string {
 	for _, coreDriver := range CoreDrivers {
 		if coreDriver == driverName {
-			return os.Args[0] // "docker-machine"
+			if CurrentBinaryIsDockerMachine {
+				return os.Args[0]
+			}
+
+			return "docker-machine"
 		}
 	}
 
@@ -123,14 +134,14 @@ func (lbe *Executor) Start() (*bufio.Scanner, *bufio.Scanner, error) {
 
 	log.Debugf("Launching plugin server for driver %s", lbe.DriverName)
 
-	cmd := exec.Command(lbe.binaryPath)
+	lbe.cmd = exec.Command(lbe.binaryPath)
 
-	lbe.pluginStdout, err = cmd.StdoutPipe()
+	lbe.pluginStdout, err = lbe.cmd.StdoutPipe()
 	if err != nil {
 		return nil, nil, fmt.Errorf("Error getting cmd stdout pipe: %s", err)
 	}
 
-	lbe.pluginStderr, err = cmd.StderrPipe()
+	lbe.pluginStderr, err = lbe.cmd.StderrPipe()
 	if err != nil {
 		return nil, nil, fmt.Errorf("Error getting cmd stderr pipe: %s", err)
 	}
@@ -141,7 +152,7 @@ func (lbe *Executor) Start() (*bufio.Scanner, *bufio.Scanner, error) {
 	os.Setenv(PluginEnvKey, PluginEnvVal)
 	os.Setenv(PluginEnvDriverName, lbe.DriverName)
 
-	if err := cmd.Start(); err != nil {
+	if err := lbe.cmd.Start(); err != nil {
 		return nil, nil, fmt.Errorf("Error starting plugin binary: %s", err)
 	}
 
@@ -149,43 +160,27 @@ func (lbe *Executor) Start() (*bufio.Scanner, *bufio.Scanner, error) {
 }
 
 func (lbe *Executor) Close() error {
-	if err := lbe.pluginStdout.Close(); err != nil {
-		return err
-	}
-
-	if err := lbe.pluginStderr.Close(); err != nil {
-		return err
+	if err := lbe.cmd.Wait(); err != nil {
+		return fmt.Errorf("Error waiting for binary close: %s", err)
 	}
 
 	return nil
 }
 
-func stream(scanner *bufio.Scanner, streamOutCh chan<- string, stopCh <-chan bool) {
-	lines := make(chan string)
-	go func() {
-		for scanner.Scan() {
-			lines <- scanner.Text()
+func stream(scanner *bufio.Scanner, streamOutCh chan<- string) {
+	for scanner.Scan() {
+		line := scanner.Text()
+		if err := scanner.Err(); err != nil {
+			log.Warnf("Scanning stream: %s", err)
 		}
-	}()
-	for {
-		select {
-		case <-stopCh:
-			close(streamOutCh)
-			return
-		case line := <-lines:
-			streamOutCh <- strings.Trim(line, "\n")
-			if err := scanner.Err(); err != nil {
-				log.Warnf("Scanning stream: %s", err)
-			}
-		}
+		streamOutCh <- strings.Trim(line, "\n")
 	}
 }
 
-func (lbp *Plugin) AttachStream(scanner *bufio.Scanner) (<-chan string, chan<- bool) {
+func (lbp *Plugin) AttachStream(scanner *bufio.Scanner) <-chan string {
 	streamOutCh := make(chan string)
-	stopCh := make(chan bool)
-	go stream(scanner, streamOutCh, stopCh)
-	return streamOutCh, stopCh
+	go stream(scanner, streamOutCh)
+	return streamOutCh
 }
 
 func (lbp *Plugin) execServer() error {
@@ -204,18 +199,16 @@ func (lbp *Plugin) execServer() error {
 
 	lbp.addrCh <- strings.TrimSpace(addr)
 
-	stdOutCh, stopStdoutCh := lbp.AttachStream(outScanner)
-	stdErrCh, stopStderrCh := lbp.AttachStream(errScanner)
+	stdOutCh := lbp.AttachStream(outScanner)
+	stdErrCh := lbp.AttachStream(errScanner)
 
 	for {
 		select {
 		case out := <-stdOutCh:
-			log.Info(fmt.Sprintf(pluginOutPrefix, lbp.MachineName), out)
+			log.Infof(pluginOut, lbp.MachineName, out)
 		case err := <-stdErrCh:
-			log.Debug(fmt.Sprintf(pluginErrPrefix, lbp.MachineName), err)
-		case _ = <-lbp.stopCh:
-			stopStdoutCh <- true
-			stopStderrCh <- true
+			log.Debugf(pluginErr, lbp.MachineName, err)
+		case <-lbp.stopCh:
 			if err := lbp.Executor.Close(); err != nil {
 				return fmt.Errorf("Error closing local plugin binary: %s", err)
 			}
@@ -230,13 +223,17 @@ func (lbp *Plugin) Serve() error {
 
 func (lbp *Plugin) Address() (string, error) {
 	if lbp.Addr == "" {
+		if lbp.timeout == 0 {
+			lbp.timeout = defaultTimeout
+		}
+
 		select {
 		case lbp.Addr = <-lbp.addrCh:
 			log.Debugf("Plugin server listening at address %s", lbp.Addr)
 			close(lbp.addrCh)
 			return lbp.Addr, nil
-		case <-time.After(defaultTimeout):
-			return "", fmt.Errorf("Failed to dial the plugin server in %s", defaultTimeout)
+		case <-time.After(lbp.timeout):
+			return "", fmt.Errorf("Failed to dial the plugin server in %s", lbp.timeout)
 		}
 	}
 	return lbp.Addr, nil

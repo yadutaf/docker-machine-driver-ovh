@@ -1,13 +1,9 @@
 language: go
 go:
-  - 1.5.1
+  - 1.6
 
 install: true
 script: "./bin/package.sh"
-
-env:
-    global:
-      - GO15VENDOREXPERIMENT=1
 
 deploy:
   provider: releases
