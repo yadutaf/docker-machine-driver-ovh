@@ -84,7 +84,7 @@
 		{
 			"importpath": "github.com/ovh/go-ovh/ovh",
 			"repository": "https://github.com/ovh/go-ovh",
-			"revision": "aefd58945d1a1148233d37d3e137837d25fb9422",
+			"revision": "09fe958c5a942b14c387de57c7805d96c8d30389",
 			"branch": "master",
 			"path": "/ovh",
 			"notests": true
