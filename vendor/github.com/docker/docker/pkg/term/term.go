@@ -27,8 +27,6 @@ type State struct {
 type Winsize struct {
 	Height uint16
 	Width  uint16
-	x      uint16
-	y      uint16
 }
 
 // StdStreams returns the standard streams (stdin, stdout, stedrr).
@@ -51,7 +49,7 @@ func GetFdInfo(in interface{}) (uintptr, bool) {
 func GetWinsize(fd uintptr) (*Winsize, error) {
 	ws := &Winsize{}
 	_, _, err := syscall.Syscall(syscall.SYS_IOCTL, fd, uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(ws)))
-	// Skipp errno = 0
+	// Skip errno = 0
 	if err == 0 {
 		return ws, nil
 	}
@@ -61,7 +59,7 @@ func GetWinsize(fd uintptr) (*Winsize, error) {
 // SetWinsize tries to set the specified window size for the specified file descriptor.
 func SetWinsize(fd uintptr, ws *Winsize) error {
 	_, _, err := syscall.Syscall(syscall.SYS_IOCTL, fd, uintptr(syscall.TIOCSWINSZ), uintptr(unsafe.Pointer(ws)))
-	// Skipp errno = 0
+	// Skip errno = 0
 	if err == 0 {
 		return nil
 	}
@@ -127,6 +125,5 @@ func handleInterrupt(fd uintptr, state *State) {
 	go func() {
 		_ = <-sigchan
 		RestoreTerminal(fd, state)
-		os.Exit(0)
 	}()
 }

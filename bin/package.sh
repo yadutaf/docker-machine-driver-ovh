@@ -6,6 +6,7 @@ OS="darwin linux windows"
 ARCH="amd64"
 
 echo "Getting build dependencies"
+go get
 go get -u github.com/golang/lint/golint
 
 echo "Ensuring code quality"

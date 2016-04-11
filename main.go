@@ -5,19 +5,20 @@ import (
 	"github.com/docker/machine/libmachine/drivers/plugin"
 )
 
+// Default values for docker-machine-driver-ovh
 const (
 	DefaultSecurityGroup = "default"
 	DefaultProjectName   = "docker-machine"
 	DefaultFlavorName    = "vps-ssd-1"
 	DefaultRegionName    = "GRA1"
 	ImageName            = "Ubuntu 14.04"
-	SshUserName          = "admin"
+	SSHUserName          = "admin"
 )
 
 func main() {
 	plugin.RegisterDriver(&Driver{
 		BaseDriver: &drivers.BaseDriver{
-			SSHUser: SshUserName,
+			SSHUser: SSHUserName,
 			SSHPort: 22,
 		}})
 }

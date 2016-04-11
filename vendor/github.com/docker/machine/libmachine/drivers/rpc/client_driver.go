@@ -3,7 +3,10 @@ package rpcdriver
 import (
 	"fmt"
 	"net/rpc"
+	"sync"
 	"time"
+
+	"io"
 
 	"github.com/docker/machine/libmachine/drivers"
 	"github.com/docker/machine/libmachine/drivers/plugin/localbinary"
@@ -14,8 +17,25 @@ import (
 )
 
 var (
-	heartbeatInterval = 200 * time.Millisecond
+	heartbeatInterval = 5 * time.Second
 )
+
+type RPCClientDriverFactory interface {
+	NewRPCClientDriver(driverName string, rawDriver []byte) (*RPCClientDriver, error)
+	io.Closer
+}
+
+type DefaultRPCClientDriverFactory struct {
+	openedDrivers     []*RPCClientDriver
+	openedDriversLock sync.Locker
+}
+
+func NewRPCClientDriverFactory() RPCClientDriverFactory {
+	return &DefaultRPCClientDriverFactory{
+		openedDrivers:     []*RPCClientDriver{},
+		openedDriversLock: &sync.Mutex{},
+	}
+}
 
 type RPCClientDriver struct {
 	plugin          localbinary.DriverPlugin
@@ -63,8 +83,6 @@ const (
 	RestartMethod            = `.Restart`
 	KillMethod               = `.Kill`
 	UpgradeMethod            = `.Upgrade`
-	LocalArtifactPathMethod  = `.LocalArtifactPath`
-	GlobalArtifactPathMethod = `.GlobalArtifactPath`
 )
 
 func (ic *InternalClient) Call(serviceMethod string, args interface{}, reply interface{}) error {
@@ -85,7 +103,22 @@ func NewInternalClient(rpcclient *rpc.Client) *InternalClient {
 	}
 }
 
-func NewRPCClientDriver(driverName string, rawDriver []byte) (*RPCClientDriver, error) {
+func (f *DefaultRPCClientDriverFactory) Close() error {
+	f.openedDriversLock.Lock()
+	defer f.openedDriversLock.Unlock()
+
+	for _, openedDriver := range f.openedDrivers {
+		if err := openedDriver.close(); err != nil {
+			// No need to display an error.
+			// There's nothing we can do and it doesn't add value to the user.
+		}
+	}
+	f.openedDrivers = []*RPCClientDriver{}
+
+	return nil
+}
+
+func (f *DefaultRPCClientDriverFactory) NewRPCClientDriver(driverName string, rawDriver []byte) (*RPCClientDriver, error) {
 	mcnName := ""
 
 	p, err := localbinary.NewPlugin(driverName)
@@ -116,6 +149,10 @@ func NewRPCClientDriver(driverName string, rawDriver []byte) (*RPCClientDriver, 
 		heartbeatDoneCh: make(chan bool),
 	}
 
+	f.openedDriversLock.Lock()
+	f.openedDrivers = append(f.openedDrivers, c)
+	f.openedDriversLock.Unlock()
+
 	var serverVersion int
 	if err := c.Client.Call(GetVersionMethod, struct{}{}, &serverVersion); err != nil {
 		// this is the first call we make to the server. We try to play nice with old pre 0.5.1 client,
@@ -138,13 +175,10 @@ func NewRPCClientDriver(driverName string, rawDriver []byte) (*RPCClientDriver, 
 			select {
 			case <-c.heartbeatDoneCh:
 				return
-			default:
+			case <-time.After(heartbeatInterval):
 				if err := c.Client.Call(HeartbeatMethod, struct{}{}, nil); err != nil {
 					log.Warnf("Error attempting heartbeat call to plugin server: %s", err)
-					c.Close()
-					return
 				}
-				time.Sleep(heartbeatInterval)
 			}
 		}
 	}(c)
@@ -169,15 +203,9 @@ func (c *RPCClientDriver) UnmarshalJSON(data []byte) error {
 	return c.SetConfigRaw(data)
 }
 
-func (c *RPCClientDriver) Close() error {
+func (c *RPCClientDriver) close() error {
 	c.heartbeatDoneCh <- true
 	close(c.heartbeatDoneCh)
-
-	log.Debug("Making call to close connection to plugin binary")
-
-	if err := c.plugin.Close(); err != nil {
-		return err
-	}
 
 	log.Debug("Making call to close driver server")
 
@@ -186,8 +214,9 @@ func (c *RPCClientDriver) Close() error {
 	}
 
 	log.Debug("Successfully made call to close driver server")
+	log.Debug("Making call to close connection to plugin binary")
 
-	return nil
+	return c.plugin.Close()
 }
 
 // Helper method to make requests which take no arguments and return simply a
@@ -327,25 +356,6 @@ func (c *RPCClientDriver) Restart() error {
 
 func (c *RPCClientDriver) Kill() error {
 	return c.Client.Call(KillMethod, struct{}{}, nil)
-}
-
-func (c *RPCClientDriver) LocalArtifactPath(file string) string {
-	var path string
-
-	if err := c.Client.Call(LocalArtifactPathMethod, file, &path); err != nil {
-		log.Warnf("Error attempting call to get LocalArtifactPath: %s", err)
-	}
-
-	return path
-}
-
-func (c *RPCClientDriver) GlobalArtifactPath() string {
-	globalArtifactPath, err := c.rpcStringCall(GlobalArtifactPathMethod)
-	if err != nil {
-		log.Warnf("Error attempting call to get GlobalArtifactPath: %s", err)
-	}
-
-	return globalArtifactPath
 }
 
 func (c *RPCClientDriver) Upgrade() error {
