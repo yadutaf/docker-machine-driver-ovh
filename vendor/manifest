@@ -2,9 +2,19 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/docker/docker/pkg/system",
+			"repository": "https://github.com/docker/docker",
+			"vcs": "git",
+			"revision": "75e63c942ec8d3852f182b9cd9c221411fc74730",
+			"branch": "master",
+			"path": "/pkg/system",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/docker/docker/pkg/term",
 			"repository": "https://github.com/docker/docker",
-			"revision": "14015eedb16c11b2f7e7a0b5ca45e78d24d34c7a",
+			"vcs": "git",
+			"revision": "2f6e3b0ba027b558adabd41344fee59db4441011",
 			"branch": "master",
 			"path": "/pkg/term",
 			"notests": true
@@ -12,6 +22,7 @@
 		{
 			"importpath": "github.com/docker/machine/libmachine/drivers",
 			"repository": "https://github.com/docker/machine",
+			"vcs": "",
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/libmachine/drivers",
@@ -20,6 +31,7 @@
 		{
 			"importpath": "github.com/docker/machine/libmachine/drivers/plugin",
 			"repository": "https://github.com/docker/machine",
+			"vcs": "",
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/libmachine/drivers/plugin",
@@ -28,6 +40,7 @@
 		{
 			"importpath": "github.com/docker/machine/libmachine/log",
 			"repository": "https://github.com/docker/machine",
+			"vcs": "",
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/libmachine/log",
@@ -36,6 +49,7 @@
 		{
 			"importpath": "github.com/docker/machine/libmachine/mcnflag",
 			"repository": "https://github.com/docker/machine",
+			"vcs": "",
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/libmachine/mcnflag",
@@ -44,6 +58,7 @@
 		{
 			"importpath": "github.com/docker/machine/libmachine/mcnutils",
 			"repository": "https://github.com/docker/machine",
+			"vcs": "",
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/libmachine/mcnutils",
@@ -52,6 +67,7 @@
 		{
 			"importpath": "github.com/docker/machine/libmachine/ssh",
 			"repository": "https://github.com/docker/machine",
+			"vcs": "",
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/libmachine/ssh",
@@ -60,6 +76,7 @@
 		{
 			"importpath": "github.com/docker/machine/libmachine/state",
 			"repository": "https://github.com/docker/machine",
+			"vcs": "",
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/libmachine/state",
@@ -68,6 +85,7 @@
 		{
 			"importpath": "github.com/docker/machine/libmachine/version",
 			"repository": "https://github.com/docker/machine",
+			"vcs": "",
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/libmachine/version",
@@ -76,6 +94,7 @@
 		{
 			"importpath": "github.com/docker/machine/version",
 			"repository": "https://github.com/docker/machine",
+			"vcs": "",
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/version",
@@ -84,6 +103,7 @@
 		{
 			"importpath": "github.com/ovh/go-ovh/ovh",
 			"repository": "https://github.com/ovh/go-ovh",
+			"vcs": "",
 			"revision": "09fe958c5a942b14c387de57c7805d96c8d30389",
 			"branch": "master",
 			"path": "/ovh",
@@ -92,6 +112,7 @@
 		{
 			"importpath": "golang.org/x/crypto/curve25519",
 			"repository": "https://go.googlesource.com/crypto",
+			"vcs": "",
 			"revision": "b8a0f4bb4040f8d884435cff35b9691e362cf00c",
 			"branch": "master",
 			"path": "/curve25519",
@@ -100,6 +121,7 @@
 		{
 			"importpath": "golang.org/x/crypto/ssh",
 			"repository": "https://go.googlesource.com/crypto",
+			"vcs": "",
 			"revision": "b8a0f4bb4040f8d884435cff35b9691e362cf00c",
 			"branch": "master",
 			"path": "/ssh",
@@ -108,6 +130,7 @@
 		{
 			"importpath": "golang.org/x/sys/unix",
 			"repository": "https://go.googlesource.com/sys",
+			"vcs": "",
 			"revision": "042a8f53ce82bbe081222da955159491e32146a0",
 			"branch": "master",
 			"path": "/unix",
@@ -116,6 +139,7 @@
 		{
 			"importpath": "gopkg.in/ini.v1",
 			"repository": "https://gopkg.in/ini.v1",
+			"vcs": "",
 			"revision": "12f418cc7edc5a618a51407b7ac1f1f512139df3",
 			"branch": "master",
 			"notests": true
