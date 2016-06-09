@@ -98,16 +98,16 @@ func (d *Driver) DriverName() string {
 }
 
 // getClient returns an OVH API client
-func (d *Driver) getClient() (api *API) {
+func (d *Driver) getClient() (api *API, err error) {
 	if d.client == nil {
 		client, err := NewAPI("ovh-eu", d.ApplicationKey, d.ApplicationSecret, d.ConsumerKey)
 		if err != nil {
-			return nil
+			return nil, fmt.Errorf("Could not create a connection to OVH API. You may want to visit: https://github.com/yadutaf/docker-machine-driver-ovh#example-usage. The original error was: %s", err)
 		}
 		d.client = client
 	}
 
-	return d.client
+	return d.client, nil
 }
 
 // SetConfigFromFlags assigns and verifies the command-line arguments presented to the driver.
@@ -134,7 +134,10 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 
 // PreCreateCheck does the network side validation
 func (d *Driver) PreCreateCheck() error {
-	client := d.getClient()
+	client, err := d.getClient()
+	if err != nil {
+		return err
+	}
 
 	// Validate project id
 	log.Debug("Validating project")
@@ -208,7 +211,10 @@ func (d *Driver) PreCreateCheck() error {
 
 // ensureSSHKey makes sure an SSH key for the machine exists with requested name
 func (d *Driver) ensureSSHKey() error {
-	client := d.getClient()
+	client, err := d.getClient()
+	if err != nil {
+		return err
+	}
 
 	// Attempt to get an existing key
 	log.Debug("Checking Key Pair...", map[string]interface{}{"Name": d.KeyPairName})
@@ -223,7 +229,7 @@ func (d *Driver) ensureSSHKey() error {
 	log.Debug("Creating Key Pair...", map[string]interface{}{"Name": d.KeyPairName})
 	keyfile := d.GetSSHKeyPath()
 	keypath := filepath.Dir(keyfile)
-	err := os.MkdirAll(keypath, 0700)
+	err = os.MkdirAll(keypath, 0700)
 	if err != nil {
 		return err
 	}
@@ -279,10 +285,13 @@ func (d *Driver) GetSSHHostname() (string, error) {
 
 // Create a new docker machine instance on OVH Cloud
 func (d *Driver) Create() error {
-	client := d.getClient()
+	client, err := d.getClient()
+	if err != nil {
+		return err
+	}
 
 	// Ensure ssh key
-	err := d.ensureSSHKey()
+	err = d.ensureSSHKey()
 	if err != nil {
 		return err
 	}
@@ -340,7 +349,10 @@ func (d *Driver) publicSSHKeyPath() string {
 func (d *Driver) GetState() (state.State, error) {
 	log.Debugf("Get status for OVH instance...", map[string]interface{}{"MachineID": d.InstanceID})
 
-	client := d.getClient()
+	client, err := d.getClient()
+	if err != nil {
+		return state.None, err
+	}
 
 	instance, err := client.GetInstance(d.ProjectID, d.InstanceID)
 	if err != nil {
@@ -383,10 +395,13 @@ func (d *Driver) Remove() error {
 	log.Debugf("deleting instance...", map[string]interface{}{"MachineID": d.InstanceID})
 	log.Info("Deleting OVH instance...")
 
-	client := d.getClient()
+	client, err := d.getClient()
+	if err != nil {
+		return err
+	}
 
 	// Deletes instance
-	err := client.DeleteInstance(d.ProjectID, d.InstanceID)
+	err = client.DeleteInstance(d.ProjectID, d.InstanceID)
 	if err != nil {
 		return err
 	}
@@ -411,9 +426,12 @@ func (d *Driver) Remove() error {
 func (d *Driver) Restart() error {
 	log.Debugf("Restarting OVH instance...", map[string]interface{}{"MachineID": d.InstanceID})
 
-	client := d.getClient()
+	client, err := d.getClient()
+	if err != nil {
+		return err
+	}
 
-	err := client.RebootInstance(d.ProjectID, d.InstanceID, false)
+	err = client.RebootInstance(d.ProjectID, d.InstanceID, false)
 	if err != nil {
 		return err
 	}
