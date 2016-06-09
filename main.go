@@ -11,8 +11,8 @@ const (
 	DefaultProjectName   = "docker-machine"
 	DefaultFlavorName    = "vps-ssd-1"
 	DefaultRegionName    = "GRA1"
-	ImageName            = "Ubuntu 14.04"
-	SSHUserName          = "admin"
+	ImageName            = "Ubuntu 16.04"
+	SSHUserName          = "ubuntu"
 )
 
 func main() {

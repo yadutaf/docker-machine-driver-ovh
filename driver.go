@@ -127,7 +127,7 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.SwarmHost = flags.String("swarm-host")
 	d.SwarmDiscovery = flags.String("swarm-discovery")
 
-	d.SSHUser = "admin"
+	d.SSHUser = SSHUserName
 
 	return nil
 }
