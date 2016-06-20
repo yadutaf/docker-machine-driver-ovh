@@ -64,7 +64,7 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			Value:  "",
 		},
 		mcnflag.StringFlag{
-			EnvVar: "OVH_APPLICATION_KEY",
+			EnvVar: "OVH_CONSUMER_KEY",
 			Name:   "ovh-consumer-key",
 			Usage:  "OVH API consumer key. May be stored in ovh.conf",
 			Value:  "",
