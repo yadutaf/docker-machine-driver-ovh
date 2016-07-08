@@ -11,14 +11,14 @@ const (
 	DefaultProjectName   = "docker-machine"
 	DefaultFlavorName    = "vps-ssd-1"
 	DefaultRegionName    = "GRA1"
-	ImageName            = "Ubuntu 16.04"
-	SSHUserName          = "ubuntu"
+	DefaultImageName     = "Ubuntu 16.04"
+	DefaultSSHUserName   = "ubuntu"
 )
 
 func main() {
 	plugin.RegisterDriver(&Driver{
 		BaseDriver: &drivers.BaseDriver{
-			SSHUser: SSHUserName,
+			SSHUser: DefaultSSHUserName,
 			SSHPort: 22,
 		}})
 }

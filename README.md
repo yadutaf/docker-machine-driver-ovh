@@ -60,14 +60,25 @@ docker-machine create -d ovh node-1
 |``--ovh-consumer-key`` or ``$OVH_CONSUMER_KEY``            |Consumer Key      |none      |yes|
 |``--ovh-region``                                           |Cloud region      |GRA1      |no|
 |``--ovh-flavor``                                           |Cloud Machine type|vps-ssd-1 |no|
+|``--ovh-image``                                            |Cloud Machine image|Ubuntu 16.04 |no|
+|``--ovh-ssh-user``                                         |Cloud Machine SSH User|ubuntu |no|
 |``--ovh-project``                                          |Cloud Project name|single one|only if multiple projects|
 
-Note: OVH credentials may be supplied through arguments, environment or configuration file, by order
+Example with parameters:
+
+```bash
+docker-machine -D create --ovh-region "SBG1" --ovh-flavor "vps-ssd-2" --ovh-image "CoreOS stable 899.15.0" --ovh-ssh-user "core" --driver ovh node-1
+```
+Note: For the different image-types you have to use special ovh-ssh-user (for Example "ubuntu" for Ubuntu OS, "core" for CoreOS and "admin" for debian)
+
+Note2: OVH credentials may be supplied through arguments, environment or configuration file, by order
 of decreasing priority. The configuration may be:
 
 - global ``/etc/ovh.conf``
 - user specific ``~/.ovh.conf``
 - application specific ``./ovh.conf``
+
+
 
 ## Hacking
 

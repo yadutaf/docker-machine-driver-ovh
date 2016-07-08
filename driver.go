@@ -85,9 +85,19 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			Value: DefaultFlavorName,
 		},
 		mcnflag.StringFlag{
+			Name:  "ovh-image",
+			Usage: "OVH Cloud Image name or id. Default: Ubuntu 16.04",
+			Value: DefaultImageName,
+		},
+		mcnflag.StringFlag{
 			Name:  "ovh-ssh-key",
 			Usage: "OVH Cloud ssh key name or id to use. Default: generate a random name",
 			Value: "",
+		},
+		mcnflag.StringFlag{
+			Name:  "ovh-ssh-user",
+			Usage: "OVH Cloud ssh username to use. Default: machine",
+			Value: DefaultSSHUserName,
 		},
 	}
 }
@@ -120,6 +130,7 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.ProjectName = flags.String("ovh-project")
 	d.RegionName = flags.String("ovh-region")
 	d.FlavorName = flags.String("ovh-flavor")
+	d.ImageID  = flags.String("ovh-image")
 	d.KeyPairName = flags.String("ovh-ssh-key")
 
 	// Swarm configuration, must be in each driver
@@ -127,7 +138,7 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.SwarmHost = flags.String("swarm-host")
 	d.SwarmDiscovery = flags.String("swarm-discovery")
 
-	d.SSHUser = SSHUserName
+	d.SSHUser = flags.String("ovh-ssh-user")
 
 	return nil
 }
@@ -192,7 +203,7 @@ func (d *Driver) PreCreateCheck() error {
 
 	// Validate image
 	log.Debug("Validating image")
-	image, err := client.GetImageByName(d.ProjectID, d.RegionName, ImageName)
+	image, err := client.GetImageByName(d.ProjectID, d.RegionName, d.ImageID)
 	if err != nil {
 		return err
 	}
