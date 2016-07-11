@@ -47,9 +47,18 @@ consumer_key=<Consumer Key>
 
 ### 3. Create your machines!
 
+*Basic example*:
+
 ```bash
 docker-machine create -d ovh node-1
 ```
+
+*Advanced example: Use CoreOS with VPS-SSD-2 in Data Center Strasbourg 1*
+
+```bash
+docker-machine -D create --ovh-region "SBG1" --ovh-flavor "vps-ssd-2" --ovh-image "CoreOS stable 899.15.0" --ovh-ssh-user "core" --driver ovh node-1
+```
+Note: For the different image-types you have to use special --ovh-ssh-user (for Example "ubuntu" for Ubuntu OS, "core" for CoreOS and "admin" for Debian)
 
 ## Options
 
@@ -64,14 +73,7 @@ docker-machine create -d ovh node-1
 |``--ovh-ssh-user``                                         |Cloud Machine SSH User|ubuntu |no|
 |``--ovh-project``                                          |Cloud Project name|single one|only if multiple projects|
 
-Example with parameters:
-
-```bash
-docker-machine -D create --ovh-region "SBG1" --ovh-flavor "vps-ssd-2" --ovh-image "CoreOS stable 899.15.0" --ovh-ssh-user "core" --driver ovh node-1
-```
-Note: For the different image-types you have to use special ovh-ssh-user (for Example "ubuntu" for Ubuntu OS, "core" for CoreOS and "admin" for debian)
-
-Note2: OVH credentials may be supplied through arguments, environment or configuration file, by order
+Note: OVH credentials may be supplied through arguments, environment or configuration file, by order
 of decreasing priority. The configuration may be:
 
 - global ``/etc/ovh.conf``
