@@ -305,7 +305,7 @@ func (a *API) RebootInstance(projectID, instanceID string, hard bool) (err error
 		rebootReq.Type = "soft"
 	}
 
-	url := fmt.Sprintf("/cloud/project/%s/instance/%s", projectID, instanceID)
+	url := fmt.Sprintf("/cloud/project/%s/instance/%s/reboot", projectID, instanceID)
 	err = a.client.Post(url, rebootReq, nil)
 	return err
 }
