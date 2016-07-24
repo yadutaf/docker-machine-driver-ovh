@@ -14,6 +14,7 @@ API credentials, you may visit https://api.ovh.com. See
 The easiest way to install ovh docker-machine driver is to:
 
 ```bash
+go get github.com/yadutaf/docker-machine-driver-ovh
 go install github.com/yadutaf/docker-machine-driver-ovh
 ln -s $GOPATH/bin/docker-machine-driver-ovh /usr/local/bin/docker-machine-driver-ovh
 ```
@@ -32,10 +33,12 @@ generating them is easy:
 
 ## 2. Create a configuration file
 
+Create a file named ```ovh.conf```.
 This file will allow any application built with official OVH API drivers to
 use it without requiring new keys:
 
 ```ini
+; ovh.conf
 [default]
 endpoint=ovh-eu
 
