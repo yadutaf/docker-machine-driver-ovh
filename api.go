@@ -132,7 +132,7 @@ func (a *API) GetProjects() (projects Projects, err error) {
 
 // GetProject return the details of a project given a project id
 func (a *API) GetProject(projectID string) (project *Project, err error) {
-	err = a.client.Get("/cloud/project/"+projectID, project)
+	err = a.client.Get("/cloud/project/"+projectID, &project)
 	return project, err
 }
 
