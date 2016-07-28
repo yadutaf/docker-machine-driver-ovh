@@ -74,7 +74,7 @@ Note: For the different image-types you have to use special --ovh-ssh-user (for 
 |``--ovh-flavor``                                           |Cloud Machine type|vps-ssd-1 |no|
 |``--ovh-image``                                            |Cloud Machine image|Ubuntu 16.04 |no|
 |``--ovh-ssh-user``                                         |Cloud Machine SSH User|ubuntu |no|
-|``--ovh-project``                                          |Cloud Project name|single one|only if multiple projects|
+|``--ovh-project``                                          |Cloud Project name/description or id|single one|only if multiple projects|
 
 Note: OVH credentials may be supplied through arguments, environment or configuration file, by order
 of decreasing priority. The configuration may be:
