@@ -130,7 +130,7 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.ProjectName = flags.String("ovh-project")
 	d.RegionName = flags.String("ovh-region")
 	d.FlavorName = flags.String("ovh-flavor")
-	d.ImageID  = flags.String("ovh-image")
+	d.ImageID = flags.String("ovh-image")
 	d.KeyPairName = flags.String("ovh-ssh-key")
 
 	// Swarm configuration, must be in each driver
@@ -211,8 +211,13 @@ func (d *Driver) PreCreateCheck() error {
 	log.Debug("Found image id ", d.ImageID)
 
 	// Use a common key or create a machine specific one
+	key_path := filepath.Join(d.StorePath, "sshkeys", d.KeyPairName)
 	if len(d.KeyPairName) != 0 {
-		d.SSHKeyPath = filepath.Join(d.StorePath, "sshkeys", d.KeyPairName)
+		if _, err := os.Stat(key_path); err == nil {
+			d.SSHKeyPath = key_path
+		} else {
+			log.Debug("SSH key", key_path, "does not exist. Assuming the key (", d.KeyPairName, ") is in '~/.ssh/' or in a SSH agent.")
+		}
 	} else {
 		d.KeyPairName = fmt.Sprintf("%s-%s", d.MachineName, mcnutils.GenerateRandomID())
 	}
@@ -292,6 +297,11 @@ func (d *Driver) waitForInstanceStatus(status string) (instance *Instance, err e
 // GetSSHHostname returns the hostname for SSH
 func (d *Driver) GetSSHHostname() (string, error) {
 	return d.IPAddress, nil
+}
+
+// GetSSHKeyPath returns the ssh key path
+func (d *Driver) GetSSHKeyPath() string {
+	return d.SSHKeyPath
 }
 
 // Create a new docker machine instance on OVH Cloud
