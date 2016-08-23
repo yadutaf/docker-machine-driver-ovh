@@ -26,6 +26,7 @@ for GOOS in $OS; do
     for GOARCH in $ARCH; do
         name="${PRODUCT}-${VERSION}-${GOOS}-${GOARCH}"
         archive="${name}.tar.gz"
+        checksum="${archive}.md5"
         build_path="${BUILD_ROOT}/${name}"
         location="${build_path}/${PRODUCT}"
 
@@ -37,6 +38,9 @@ for GOOS in $OS; do
 
         echo "Packing ${location}"
         tar -cvzf $PKG_ROOT/$archive -C $build_path $PRODUCT
+
+        echo "Calculating checksum"
+        cd $PKG_ROOT && md5sum $archive > $checksum && cd ..
     done
 done
 
