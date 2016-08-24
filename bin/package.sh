@@ -33,7 +33,6 @@ for GOOS in $OS; do
         echo "Building ${name}"
         export GOOS=$GOOS
         export GOARCH=$GOARCH
-        go get
         go build -o $location
 
         echo "Packing ${location}"
