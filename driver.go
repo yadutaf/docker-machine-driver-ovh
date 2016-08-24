@@ -211,12 +211,12 @@ func (d *Driver) PreCreateCheck() error {
 	log.Debug("Found image id ", d.ImageID)
 
 	// Use a common key or create a machine specific one
-	key_path := filepath.Join(d.StorePath, "sshkeys", d.KeyPairName)
+	keyPath := filepath.Join(d.StorePath, "sshkeys", d.KeyPairName)
 	if len(d.KeyPairName) != 0 {
-		if _, err := os.Stat(key_path); err == nil {
-			d.SSHKeyPath = key_path
+		if _, err := os.Stat(keyPath); err == nil {
+			d.SSHKeyPath = keyPath
 		} else {
-			log.Debug("SSH key", key_path, "does not exist. Assuming the key (", d.KeyPairName, ") is in '~/.ssh/' or in a SSH agent.")
+			log.Debug("SSH key", keyPath, "does not exist. Assuming the key (", d.KeyPairName, ") is in '~/.ssh/' or in a SSH agent.")
 		}
 	} else {
 		d.KeyPairName = fmt.Sprintf("%s-%s", d.MachineName, mcnutils.GenerateRandomID())
