@@ -9,15 +9,15 @@ PRODUCT="docker-machine-driver-ovh"
 PKG_ROOT="pkg"
 BUILD_ROOT="build"
 
-echo "Building version $VERSION of $PRODUCT in $GOPATH"
+echo "➜ Building version $VERSION of $PRODUCT in $GOPATH"
 mkdir -p $PKG_ROOT
 mkdir -p $BUILD_ROOT
 
-echo "Getting build dependencies"
+echo "➜ Getting build dependencies"
 go get
 go get -u github.com/golang/lint/golint
 
-echo "Ensuring code quality"
+echo "➜ Ensuring code quality"
 pkgs=$(go list ./... | grep -v 'vendor')
 go vet $pkgs
 golint $pkgs
@@ -30,20 +30,21 @@ for GOOS in $OS; do
         build_path="${BUILD_ROOT}/${name}"
         location="${build_path}/${PRODUCT}"
 
-        echo "Building ${name}"
+        echo "➜ Releasing ${PRODUCT} for ${GOOS}-${GOARCH}"
+        echo "⤷ Build"
         export GOOS=$GOOS
         export GOARCH=$GOARCH
         go build -o $location
 
-        echo "Packing ${location}"
-        tar -cvzf $PKG_ROOT/$archive -C $build_path $PRODUCT
+        echo "⤷ Package"
+        tar -czf $PKG_ROOT/$archive -C $build_path $PRODUCT
 
-        echo "Calculating checksum"
+        echo "⤷ Checksum"
         cd $PKG_ROOT && md5sum $archive > $checksum && cd ..
     done
 done
 
-echo "Cleaning"
+echo "➜ Cleaning"
 rm -rf $BUILD_ROOT
 
 echo "Build completed."
