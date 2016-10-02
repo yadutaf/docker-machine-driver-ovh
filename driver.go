@@ -247,6 +247,7 @@ func (d *Driver) PreCreateCheck() error {
 		}
 	} else {
 		d.KeyPairName = fmt.Sprintf("%s-%s", d.MachineName, mcnutils.GenerateRandomID())
+		d.SSHKeyPath = d.ResolveStorePath(d.KeyPairName)
 	}
 
 	return nil
