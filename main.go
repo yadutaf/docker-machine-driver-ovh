@@ -13,6 +13,7 @@ const (
 	DefaultRegionName    = "GRA1"
 	DefaultImageName     = "Ubuntu 16.04"
 	DefaultSSHUserName   = "ubuntu"
+	DefaultBillingPeriod = "hourly"
 )
 
 func main() {

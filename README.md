@@ -76,6 +76,7 @@ Note: For the different image-types you have to use special --ovh-ssh-user (for 
 |``--ovh-ssh-user``                                         |Cloud Machine SSH User|ubuntu |no|
 |``--ovh-project``                                          |Cloud Project name/description or id|single one|only if multiple projects|
 |``--ovh-ssh-key``                                          |Cloud Machine SSH Key|none |no|
+|``--ovh-billing-period``                                   |OVH Cloud billing period (hourly or monthly)|hourly |no|
 
 Note:
 

@@ -30,6 +30,9 @@ type Driver struct {
 	FlavorName  string
 	RegionName  string
 
+	// Ovh specific parameters
+	BillingPeriod string
+
 	// Internal ids
 	ProjectID   string
 	FlavorID    string
@@ -99,6 +102,11 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			Usage: "OVH Cloud ssh username to use. Default: machine",
 			Value: DefaultSSHUserName,
 		},
+		mcnflag.StringFlag{
+			Name:  "ovh-billing-period",
+			Usage: "OVH Cloud billing period (hourly or monthly). Default: hourly",
+			Value: DefaultBillingPeriod,
+		},
 	}
 }
 
@@ -132,6 +140,7 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.FlavorName = flags.String("ovh-flavor")
 	d.ImageID = flags.String("ovh-image")
 	d.KeyPairName = flags.String("ovh-ssh-key")
+	d.BillingPeriod = flags.String("ovh-billing-period")
 
 	// Swarm configuration, must be in each driver
 	d.SwarmMaster = flags.Bool("swarm-master")
@@ -149,6 +158,13 @@ func (d *Driver) PreCreateCheck() error {
 	if err != nil {
 		return err
 	}
+
+	// Validate billing period
+	log.Debug("Validating billing period")
+	if d.BillingPeriod != "monthly" && d.BillingPeriod != "hourly" {
+		return fmt.Errorf("Invalid billing period '%s'. Please select one of 'hourly', 'monthly'", d.BillingPeriod)
+	}
+	log.Debug("Selecting billing period", d.BillingPeriod)
 
 	// Validate project id
 	log.Debug("Validating project")
@@ -330,6 +346,7 @@ func (d *Driver) Create() error {
 
 	// Create instance
 	log.Debug("Creating OVH instance...")
+	monthlyBilling := d.BillingPeriod == "monthly"
 	instance, err := client.CreateInstance(
 		d.ProjectID,
 		d.MachineName,
@@ -337,7 +354,7 @@ func (d *Driver) Create() error {
 		d.FlavorID,
 		d.ImageID,
 		d.RegionName,
-		false,
+		monthlyBilling,
 	)
 	if err != nil {
 		return err
