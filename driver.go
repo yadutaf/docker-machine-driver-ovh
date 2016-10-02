@@ -170,7 +170,18 @@ func (d *Driver) PreCreateCheck() error {
 		} else if len(projects) == 0 {
 			return fmt.Errorf("No Cloud project could be found. To create a new one, please visit %s", CustomerInterface)
 		} else {
-			return fmt.Errorf("Multiple Cloud project found, to select one, use '--ovh-project' option")
+			// Build a list of project names to help choose one
+			var projectNames []string
+			for _, projectID := range projects {
+				project, err := client.GetProject(projectID)
+				if err != nil {
+					projectNames = append(projectNames, projectID)
+				} else {
+					projectNames = append(projectNames, project.Name)
+				}
+			}
+
+			return fmt.Errorf("Multiple Cloud project found (%s), to select one, use '--ovh-project' option", strings.Join(projectNames[:], ", "))
 		}
 	}
 	log.Debug("Found project id ", d.ProjectID)
