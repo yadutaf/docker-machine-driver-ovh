@@ -432,10 +432,12 @@ func (d *Driver) Remove() error {
 		return err
 	}
 
-	// Deletes instance
-	err = client.DeleteInstance(d.ProjectID, d.InstanceID)
-	if err != nil {
-		return err
+	// Deletes instance, if we created it
+	if d.InstanceID != "" {
+		err = client.DeleteInstance(d.ProjectID, d.InstanceID)
+		if err != nil {
+			return err
+		}
 	}
 
 	// If key name  does not starts with the machine ID, this is a pre-existing key, keep it
@@ -444,11 +446,13 @@ func (d *Driver) Remove() error {
 		return nil
 	}
 
-	// Deletes ssh key
-	log.Debugf("deleting key pair...", map[string]interface{}{"KeyPairID": d.KeyPairID})
-	err = client.DeleteSshkey(d.ProjectID, d.KeyPairID)
-	if err != nil {
-		return err
+	// Deletes ssh key, if we created it
+	if d.KeyPairID != "" {
+		log.Debugf("deleting key pair...", map[string]interface{}{"KeyPairID": d.KeyPairID})
+		err = client.DeleteSshkey(d.ProjectID, d.KeyPairID)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
