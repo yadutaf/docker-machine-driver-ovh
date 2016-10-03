@@ -2,6 +2,22 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/Azure/go-ansiterm",
+			"repository": "https://github.com/Azure/go-ansiterm",
+			"vcs": "git",
+			"revision": "fa152c58bc15761d0200cb75fe958b89a9d4888e",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/Sirupsen/logrus",
+			"repository": "https://github.com/Sirupsen/logrus",
+			"vcs": "git",
+			"revision": "3ec0642a7fb6488f65b06f9040adc67e3990296a",
+			"branch": "master",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/docker/docker/pkg/system",
 			"repository": "https://github.com/docker/docker",
 			"vcs": "git",
@@ -26,15 +42,6 @@
 			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
 			"branch": "master",
 			"path": "/libmachine/drivers",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/docker/machine/libmachine/drivers/plugin",
-			"repository": "https://github.com/docker/machine",
-			"vcs": "",
-			"revision": "5b4159d0d8a1c96cf585b23710f2090ddb9c9384",
-			"branch": "master",
-			"path": "/libmachine/drivers/plugin",
 			"notests": true
 		},
 		{
@@ -134,6 +141,22 @@
 			"revision": "042a8f53ce82bbe081222da955159491e32146a0",
 			"branch": "master",
 			"path": "/unix",
+			"notests": true
+		},
+		{
+			"importpath": "gopkg.in/airbrake/gobrake.v2",
+			"repository": "https://gopkg.in/airbrake/gobrake.v2",
+			"vcs": "git",
+			"revision": "5d77bd50d083834501349f8be70197b26963674d",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "gopkg.in/gemnasium/logrus-airbrake-hook.v2",
+			"repository": "https://gopkg.in/gemnasium/logrus-airbrake-hook.v2",
+			"vcs": "git",
+			"revision": "bfee1239d796830ca346767650cce5ba90d58c57",
+			"branch": "master",
 			"notests": true
 		},
 		{
