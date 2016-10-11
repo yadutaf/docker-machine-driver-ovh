@@ -10,6 +10,7 @@ deploy:
   skip_cleanup: true
   api_key:
     secure: cb8hpYYUDstAgce5n9KEiXysWMj3ln7MO4BhtFQ90AH54zg/mNJ2aTGZoSkd5h5u5u0jdU4C9kXTcN8VzFpcSR11YInFl2j+P16JtkKbOTqkBuEO+56QZH04c1t4LUjonmPhyyi1Ru1WSbA7ohr13MN/mPbLziJhhytU37tcQxNc3VQ+gGrDsVTjE/E5MzEGzpZtCEU3tA8gFK/FbknI67m80tby0GiZLAuEmt4K8HfAmTC1bwxzg2qFnduRfKhg9HiQaS/xFUGqT3MqSW86k9bS7cWqdPItH8oEMdToUOv1cwpuVsLqjMZXjzZCvnbQ8ynbAPxWUHza9KHtBTXpf8dpAYiv0PXbmU+zA0s0RZg6pyxNrPw+ldfQY6FgeKz69j+O3NfCXSr+qqZTisARcmKzlx5KQpfmm6mzieFUe/n6Yr8FXkZjqZMecMDjdyJGfBG7CdWTQGXvAvfmtpKt7Jw5ZRWqIWvPCHIElAws/HQbac31SflWLlkTaTYKVdImUzfGftgLNjwFRzwDKuJS+wFYN8QMNb8MQYArr0R9RUVinksvCvBI5VPBLCKKGG0KSh+BDa89y5e2CZ4gjC0tllIGdJItYcCrpKiOFsTP+HxKcsysctxYryA9HvTcp8S4Tg7Lp9L2fVhCowBs0d7qAAt7mPJ009nYQ9sOWoEfTh4=
+  file_glob: true
   file: 'pkg/docker-machine-driver-ovh-*.tar.gz'
   on:
     repo: yadutaf/docker-machine-driver-ovh
