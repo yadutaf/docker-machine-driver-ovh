@@ -247,10 +247,15 @@ func (d *Driver) PreCreateCheck() error {
 		}
 	} else {
 		d.KeyPairName = fmt.Sprintf("%s-%s", d.MachineName, mcnutils.GenerateRandomID())
+		sanitizeKeyPairName(&d.KeyPairName)
 		d.SSHKeyPath = d.ResolveStorePath(d.KeyPairName)
 	}
 
 	return nil
+}
+//copied from openstack driver
+func sanitizeKeyPairName(s *string) {
+	*s = strings.Replace(*s, ".", "_", -1)
 }
 
 // ensureSSHKey makes sure an SSH key for the machine exists with requested name
