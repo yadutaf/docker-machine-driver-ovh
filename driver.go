@@ -32,6 +32,7 @@ type Driver struct {
 
 	// Ovh specific parameters
 	BillingPeriod string
+	Endpoint      string
 
 	// Internal ids
 	ProjectID   string
@@ -118,7 +119,7 @@ func (d *Driver) DriverName() string {
 // getClient returns an OVH API client
 func (d *Driver) getClient() (api *API, err error) {
 	if d.client == nil {
-		client, err := NewAPI("ovh-eu", d.ApplicationKey, d.ApplicationSecret, d.ConsumerKey)
+		client, err := NewAPI(d.Endpoint, d.ApplicationKey, d.ApplicationSecret, d.ConsumerKey)
 		if err != nil {
 			return nil, fmt.Errorf("Could not create a connection to OVH API. You may want to visit: https://github.com/yadutaf/docker-machine-driver-ovh#example-usage. The original error was: %s", err)
 		}
