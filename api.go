@@ -124,6 +124,14 @@ func NewAPI(endpoint, applicationKey, applicationSecret, consumerKey string) (ap
 	return &API{client}, err
 }
 
+// GetEndpoints returns a list of ovh endpoint
+func (a *API) GetEndpoints() (endpoints []string) {
+	for k := range ovh.Endpoints {
+		endpoints = append(endpoints, k)
+	}
+	return endpoints
+}
+
 // GetProjects returns a list of string project ID
 func (a *API) GetProjects() (projects Projects, err error) {
 	err = a.client.Get("/cloud/project", &projects)
