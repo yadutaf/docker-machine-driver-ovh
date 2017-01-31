@@ -76,7 +76,7 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 		mcnflag.StringFlag{
 			Name:  "ovh-endpoint",
 			Usage: "OVH Cloud API endpoint. Default: ovh-eu",
-			Value: DefaultEndpoint,
+			Value: "",
 		},
 		mcnflag.StringFlag{
 			Name:  "ovh-project",
@@ -172,23 +172,6 @@ func (d *Driver) PreCreateCheck() error {
 		return fmt.Errorf("Invalid billing period '%s'. Please select one of 'hourly', 'monthly'", d.BillingPeriod)
 	}
 	log.Debug("Selecting billing period", d.BillingPeriod)
-
-	// Validate ovh endpoint
-	log.Debug("Validating endpoint")
-	endpoints := client.GetEndpoints()
-	if err != nil {
-			return err
-	}
-	var ok_ep bool
-	for _, endpoint := range endpoints {
-		if endpoint == d.Endpoint {
-			ok_ep = true
-			break
-		}
-	}
-	if ok_ep != true {
-		return fmt.Errorf("Invalid endpoint %s. For a list of valid ovh endpoints, please visit %s", d.Endpoint, CustomerInterface)
-	}
 
 	// Validate project id
 	log.Debug("Validating project")
