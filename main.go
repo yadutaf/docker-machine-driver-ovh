@@ -14,7 +14,6 @@ const (
 	DefaultImageName     = "Ubuntu 16.04"
 	DefaultSSHUserName   = "ubuntu"
 	DefaultBillingPeriod = "hourly"
-	DefaultEndpoint      = "ovh-eu"
 )
 
 func main() {
