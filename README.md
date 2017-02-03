@@ -72,6 +72,7 @@ Note: For the different image-types you have to use special --ovh-ssh-user (for 
 |``--ovh-consumer-key`` or ``$OVH_CONSUMER_KEY``            |Consumer Key      |none      |yes|
 |``--ovh-endpoint`` or ``$OVH_ENDPOINT``                    |Endpoint          |none      |no|
 |``--ovh-region``                                           |Cloud region      |GRA1      |no|
+|``--ovh-private-network``                                  |Cloud private network |public |no|
 |``--ovh-flavor``                                           |Cloud Machine type|vps-ssd-1 |no|
 |``--ovh-image``                                            |Cloud Machine image|Ubuntu 16.04 |no|
 |``--ovh-ssh-user``                                         |Cloud Machine SSH User|ubuntu |no|

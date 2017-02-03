@@ -26,9 +26,10 @@ type Driver struct {
 	*drivers.BaseDriver
 
 	// Command line parameters
-	ProjectName string
-	FlavorName  string
-	RegionName  string
+	ProjectName        string
+	FlavorName         string
+	RegionName         string
+	PrivateNetworkName string
 
 	// Ovh specific parameters
 	BillingPeriod string
@@ -41,6 +42,7 @@ type Driver struct {
 	InstanceID  string
 	KeyPairName string
 	KeyPairID   string
+	NetworkIDs  []string
 
 	// Overloaded credentials
 	ApplicationKey    string
@@ -99,6 +101,11 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			Value: DefaultImageName,
 		},
 		mcnflag.StringFlag{
+			Name:  "ovh-private-network",
+			Usage: "OVH Cloud (private) Network name or id. Default: public network",
+			Value: "",
+		},
+		mcnflag.StringFlag{
 			Name:  "ovh-ssh-key",
 			Usage: "OVH Cloud ssh key name or id to use. Default: generate a random name",
 			Value: "",
@@ -146,6 +153,7 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.RegionName = flags.String("ovh-region")
 	d.FlavorName = flags.String("ovh-flavor")
 	d.ImageID = flags.String("ovh-image")
+	d.PrivateNetworkName = flags.String("ovh-private-network")
 	d.KeyPairName = flags.String("ovh-ssh-key")
 	d.BillingPeriod = flags.String("ovh-billing-period")
 
@@ -243,6 +251,27 @@ func (d *Driver) PreCreateCheck() error {
 	}
 	d.ImageID = image.ID
 	log.Debug("Found image id ", d.ImageID)
+
+	// Validate private network
+	log.Debug("Validating private network")
+	if d.PrivateNetworkName != "" {
+		privateNetwork, err := client.GetPrivateNetworkByName(d.ProjectID, d.PrivateNetworkName)
+		if err != nil {
+			return err
+		}
+		d.NetworkIDs = append(d.NetworkIDs, privateNetwork.ID)
+		log.Debug("Found private network id ", privateNetwork.ID)
+
+		publicNetworkID, err := client.GetPublicNetworkID(d.ProjectID)
+		if err != nil {
+			return err
+		}
+		d.NetworkIDs = append(d.NetworkIDs, publicNetworkID)
+		log.Debug("Found public network id ", publicNetworkID)
+
+	} else {
+		log.Debug("No private network found. Using public network")
+	}
 
 	// Use a common key or create a machine specific one
 	keyPath := filepath.Join(d.StorePath, "sshkeys", d.KeyPairName)
@@ -367,6 +396,7 @@ func (d *Driver) Create() error {
 		d.FlavorID,
 		d.ImageID,
 		d.RegionName,
+		d.NetworkIDs,
 		monthlyBilling,
 	)
 	if err != nil {

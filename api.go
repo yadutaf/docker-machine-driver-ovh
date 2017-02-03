@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/ovh/go-ovh/ovh"
+	"strings"
 )
 
 const (
@@ -61,6 +62,18 @@ type Images []Image
 // Regions is a list of Cloud Region names
 type Regions []string
 
+// Network defines the private network names
+type Network struct {
+	Status string `json:"status"`
+	Name   string `json:"name"`
+	Type   string `json:"type"`
+	ID     string `json:"id"`
+	VlanID int    `json:"vlanid"`
+}
+
+// Networks is a list of Network
+type Networks []Network
+
 // SshkeyReq defines the fields for an SSH Key upload
 type SshkeyReq struct {
 	Name      string `json:"name"`
@@ -89,28 +102,37 @@ type IP struct {
 // IPs is a list of IPs
 type IPs []IP
 
+// NetworkParmas for Cloud instance
+type NetworkParam struct {
+	ID string `json:"networkId"`
+}
+
+type NetworkParams []NetworkParam
+
 // InstanceReq defines the fields for a VM creation
 type InstanceReq struct {
-	Name           string `json:"name"`
-	FlavorID       string `json:"flavorID"`
-	ImageID        string `json:"imageID"`
-	Region         string `json:"region"`
-	SshkeyID       string `json:"sshKeyID"`
-	MonthlyBilling bool   `json:"monthlyBilling"`
+	Name           string        `json:"name"`
+	FlavorID       string        `json:"flavorID"`
+	ImageID        string        `json:"imageID"`
+	Region         string        `json:"region"`
+	NetworkParams  NetworkParams `json:"networks"`
+	SshkeyID       string        `json:"sshKeyID"`
+	MonthlyBilling bool          `json:"monthlyBilling"`
 }
 
 // Instance is a go representation of Cloud instance
 type Instance struct {
-	Name           string `json:"name"`
-	ID             string `json:"id"`
-	Status         string `json:"status"`
-	Created        string `json:"created"`
-	Region         string `json:"region"`
-	Image          Image  `json:"image"`
-	Flavor         Flavor `json:"flavor"`
-	Sshkey         Sshkey `json:"sshKey"`
-	IPAddresses    IPs    `json:"ipAddresses"`
-	MonthlyBilling bool   `json:"monthlyBilling"`
+	Name           string        `json:"name"`
+	ID             string        `json:"id"`
+	Status         string        `json:"status"`
+	Created        string        `json:"created"`
+	Region         string        `json:"region"`
+	NetworkParams  NetworkParams `json:"networks"`
+	Image          Image         `json:"image"`
+	Flavor         Flavor        `json:"flavor"`
+	Sshkey         Sshkey        `json:"sshKey"`
+	IPAddresses    IPs           `json:"ipAddresses"`
+	MonthlyBilling bool          `json:"monthlyBilling"`
 }
 
 // RebootReq defines the fields for a VM reboot
@@ -165,6 +187,51 @@ func (a *API) GetProjectByName(projectName string) (project *Project, err error)
 
 	// Ooops
 	return nil, fmt.Errorf("Project '%s' does not exist on OVH cloud. To create or rename a project, please visit %s", projectName, CustomerInterface)
+}
+
+// GetNetworks returns public & private networks for a given project
+func (a *API) GetNetworks(projectID string, privateNet bool) (networks Networks, err error) {
+	// if network type is true lets get the private network
+	var url string
+	if privateNet == true {
+		url = fmt.Sprintf("/cloud/project/%s/network/private", projectID)
+	} else {
+		url = fmt.Sprintf("/cloud/project/%s/network/public", projectID)
+	}
+	err = a.client.Get(url, &networks)
+	return networks, err
+}
+
+// GetPublicNetworkID returns the public network id for a given project
+func (a *API) GetPublicNetworkID(projectID string) (publicID string, err error) {
+	networks, err := a.GetNetworks(projectID, false)
+	if err != nil {
+		return "", err
+	}
+	return networks[0].ID, nil
+}
+
+// GetNetworksByName returns the details of a network given its name & project
+func (a *API) GetPrivateNetworkByName(projectID, networkName string) (network *Network, err error) {
+	// Get image list
+	networks, err := a.GetNetworks(projectID, true)
+	if err != nil {
+		return nil, err
+	}
+
+	// Find first matching network
+	for _, network := range networks {
+		if network.ID == networkName || network.Name == networkName {
+			return &network, nil
+		}
+	}
+
+	var networkNames []string
+	for _, network := range networks {
+		networkNames = append(networkNames, network.Name)
+	}
+
+	return nil, fmt.Errorf("Invalid private network %s. List of valid private networks include %s", networkName, strings.Join(networkNames[:], ", "))
 }
 
 // GetRegions returns the list of valid regions for a given project
@@ -282,7 +349,7 @@ func (a *API) DeleteSshkey(projectID, instanceID string) (err error) {
 }
 
 // CreateInstance start a new public cloud instance and returns resulting object
-func (a *API) CreateInstance(projectID, name, pubkeyID, flavorID, ImageID, region string, monthlyBilling bool) (instance *Instance, err error) {
+func (a *API) CreateInstance(projectID, name, pubkeyID, flavorID, ImageID, region string, networkIDs []string, monthlyBilling bool) (instance *Instance, err error) {
 	var instanceReq InstanceReq
 	instanceReq.Name = name
 	instanceReq.SshkeyID = pubkeyID
@@ -290,6 +357,11 @@ func (a *API) CreateInstance(projectID, name, pubkeyID, flavorID, ImageID, regio
 	instanceReq.ImageID = ImageID
 	instanceReq.Region = region
 	instanceReq.MonthlyBilling = monthlyBilling
+
+	for _, v := range networkIDs {
+		networkParam := NetworkParam{ID: v}
+		instanceReq.NetworkParams = append(instanceReq.NetworkParams, networkParam)
+	}
 
 	url := fmt.Sprintf("/cloud/project/%s/instance", projectID)
 	err = a.client.Post(url, instanceReq, &instance)
