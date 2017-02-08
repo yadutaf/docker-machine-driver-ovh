@@ -221,7 +221,7 @@ func (a *API) GetPrivateNetworkByName(projectID, networkName string) (network *N
 
 	// Find first matching network
 	for _, network := range networks {
-		if network.ID == networkName || network.Name == networkName {
+		if fmt.Sprintf("%d", network.VlanID) == networkName || network.Name == networkName {
 			return &network, nil
 		}
 	}

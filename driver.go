@@ -102,7 +102,7 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 		},
 		mcnflag.StringFlag{
 			Name:  "ovh-private-network",
-			Usage: "OVH Cloud (private) Network name or id. Default: public network",
+			Usage: "OVH Cloud (private) network name or vlan number. Default: public network",
 			Value: "",
 		},
 		mcnflag.StringFlag{
