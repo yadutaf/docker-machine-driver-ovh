@@ -63,7 +63,9 @@ docker-machine -D create --ovh-region "SBG1" --ovh-flavor "vps-ssd-2" --ovh-imag
 ```
 Note: For the different image-types you have to use special --ovh-ssh-user (for Example "ubuntu" for Ubuntu OS, "core" for CoreOS and "admin" for Debian)
 
-## Options
+## Configuration
+
+### Options
 
 |Option Name|Description|Default Value|required|
 |---|---|---|---|
@@ -80,21 +82,51 @@ Note: For the different image-types you have to use special --ovh-ssh-user (for 
 |``--ovh-ssh-key``                                          |Cloud Machine SSH Key|none |no|
 |``--ovh-billing-period``                                   |OVH Cloud billing period (hourly or monthly)|hourly |no|
 
-Note:
+### Vrack integration
 
-1. OVH credentials
+The vRack is [OVH's private networks](https://www.ovh.com/us/solutions/vrack/). A vRack may contain up to 4000 Vlans and any compatible OVH products, including Cloud projects.
+To use the vRack with this docker-machine driver:
 
-   OVH credentials may be supplied through arguments, environment or configuration file, by order of decreasing priority. The configuration may be:
+1. [Create a new vRack](https://www.ovh.com/manager/cloud/index.html#/vrack/new) if needed (this is free)
+2. [Add your Cloud project to the vRack](https://www.ovh.com/manager/cloud/index.html#/vrack)
+3. [Go back to your Cloud project](https://www.ovh.com/manager/cloud/index.html#/iaas/pci/project)
+4. And configure some Vlan
 
-   - global ``/etc/ovh.conf``
-   - user specific ``~/.ovh.conf``
-   - application specific ``./ovh.conf``
+Once this setup is done, you are ready to use the vRack with Docker Machine:
 
-2. SSH key
+```
+VLAN_NUMBER=3
+docker-machine create -d ovh --ovh-private-network $VLAN_NUMBER machine-in-the-vrack
+```
 
-   Docker-machine can generate a key for each new machine. It is a nice feature to start with but it will quickly load your OVH project with many keys (even though these keys are removed uppon machine deletion).
+Note that you will still need to configure the interface. A quick way to do it is:
 
-   With the `--ovh-ssh-key` option you can define a key name (already present in your ovh project). This key must be accessible (in ~/.ssh or in the ssh agent) by the ssh binary present on the machine running docker-mamchine.
+```
+docker-machine ssh machine-in-the-vrack
+
+# Create the configuration file
+sudo tee /etc/network/interfaces.d/99-vrack.cfg << EOF
+auto ens4
+iface ens4 inet dhcp
+EOF
+
+# Enable the interface
+sudo ifup ens4
+```
+
+### Authentication
+
+OVH credentials may be supplied through arguments, environment or configuration file, by order of decreasing priority. The configuration may be:
+
+- global ``/etc/ovh.conf``
+- user specific ``~/.ovh.conf``
+- application specific ``./ovh.conf``
+
+### SSH Key
+
+Docker-machine can generate a key for each new machine. It is a nice feature to start with but it will quickly load your OVH project with many keys (even though these keys are removed uppon machine deletion).
+
+With the `--ovh-ssh-key` option you can define a key name (already present in your ovh project). This key must be accessible (in ~/.ssh or in the ssh agent) by the ssh binary present on the machine running docker-mamchine.
 
 ## Hacking
 
