@@ -16,7 +16,7 @@ The easiest way to install ovh docker-machine driver is to:
 ```bash
 go get github.com/yadutaf/docker-machine-driver-ovh
 go install github.com/yadutaf/docker-machine-driver-ovh
-ln -s $GOPATH/bin/docker-machine-driver-ovh /usr/local/bin/docker-machine-driver-ovh
+ln -s $(go env GOPATH)/bin/docker-machine-driver-ovh /usr/local/bin/docker-machine-driver-ovh
 ```
 
 ## Example Usage
@@ -134,7 +134,7 @@ With the `--ovh-ssh-key` option you can define a key name (already present in yo
 
 ```bash
 go get github.com/yadutaf/docker-machine-driver-ovh
-cd $GOPATH/src/github.com/yadutaf/docker-machine-driver-ovh
+cd $(go env GOPATH)/src/github.com/yadutaf/docker-machine-driver-ovh
 ```
 
 ### Build the driver
@@ -147,7 +147,7 @@ To test the driver make sure your current build directory has the highest
 priority in your ``$PATH`` so that docker-machine can find it.
 
 ```
-export PATH=$GOPATH/src/github.com/yadutaf/docker-machine-driver-ovh:$PATH
+export PATH=$(go env GOPATH)/src/github.com/yadutaf/docker-machine-driver-ovh:$PATH
 ```
 
 ## Related links
